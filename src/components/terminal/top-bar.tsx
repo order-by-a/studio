@@ -4,17 +4,37 @@ import { Maximize, Sun } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 const TopBar = () => {
-    const [weather, setWeather] = useState('Bhubaneswar 31°C');
+    const [weather, setWeather] = useState('Fetching weather...');
     const [currentTime, setCurrentTime] = useState('');
 
     useEffect(() => {
-        const fetchWeather = async () => {
-            const weatherData: any = await getWeatherInfo('Bhubaneswar');
-            if (weatherData && !weatherData.error) {
-                setWeather(`Bhubaneswar ${weatherData.current_condition[0].temp_C}°C`);
+        const fetchUserWeather = () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    const { latitude, longitude } = position.coords;
+                    const weatherData: any = await getWeatherInfo(`${latitude},${longitude}`);
+                    if (weatherData && !weatherData.error) {
+                        const area = weatherData.nearest_area[0];
+                        setWeather(`${area.areaName[0].value} ${weatherData.current_condition[0].temp_C}°C`);
+                    } else {
+                        setWeather('Weather unavailable');
+                    }
+                }, async () => {
+                    // Fallback to IP-based location if permission denied
+                    const ipWeather: any = await getWeatherInfo();
+                     if (ipWeather && !ipWeather.error) {
+                        const area = ipWeather.nearest_area[0];
+                        setWeather(`${area.areaName[0].value} ${ipWeather.current_condition[0].temp_C}°C`);
+                    } else {
+                        setWeather('Location access denied');
+                    }
+                });
+            } else {
+                setWeather('Geolocation not supported');
             }
         };
-        fetchWeather();
+
+        fetchUserWeather();
 
         const timer = setInterval(() => {
             const now = new Date();
