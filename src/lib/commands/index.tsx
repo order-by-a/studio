@@ -19,6 +19,7 @@ type CommandContext = {
     setShutdown: (shutdown: boolean) => void;
     playSound: (type: 'enter' | 'error') => void;
     typingSpeed: number;
+    showStartupMessages?: () => void;
 };
 
 type CommandHandler = (args: string[], context: CommandContext) => Promise<React.ReactNode | string>;
@@ -37,14 +38,18 @@ const showError = (cmd: string, context: CommandContext) => {
 }
 
 export const processCommand = async (context: CommandContext) => {
-    const { command: fullCommand, addOutput, typingSpeed } = context;
+    const { command: fullCommand, addOutput, typingSpeed, clearOutputs } = context;
     const [cmd, ...args] = fullCommand.trim().toLowerCase().split(' ').filter(Boolean);
 
     if (!cmd) {
         return;
     }
-
+    
     const handler = commands[cmd];
+
+    if (fullCommand.trim() !== 'clear') {
+        clearOutputs();
+    }
 
     if (!handler) {
         const outputContent = showError(cmd, context);

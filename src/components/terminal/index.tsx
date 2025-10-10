@@ -63,25 +63,44 @@ const Terminal = () => {
     setOutputs(prev => [...prev, { id: Date.now() + Math.random(), content, isCommand, command }]);
   }, []);
 
+  const clearAndHeader = useCallback(() => {
+    setOutputs([]);
+    addOutput(<AsciiHeader />);
+    addOutput(`Type '?' or 'help' to view a list of available commands.`);
+  }, [addOutput]);
+
   const runCommand = useCallback(async (command: string) => {
-    if (command.trim().toLowerCase() === 'poweron') {
+    const trimmedCommand = command.trim().toLowerCase();
+    if (trimmedCommand === 'poweron') {
         setShutdown(false);
-        setOutputs([]); // Clear outputs on poweron
-        addOutput(<AsciiHeader />);
-        addOutput(`Type '?' or 'help' to view a list of available commands.`);
+        clearAndHeader();
         return;
     }
     
     setCommandInProgress(true);
     addToHistory(command);
-    addOutput(command, true, `${username}@${hostname}`);
+
+    if (trimmedCommand !== 'clear') {
+      addOutput(command, true, `${username}@${hostname}`);
+    }
+    
     playSound('enter');
     
     await processCommand({
       command,
       username,
       addOutput,
-      clearOutputs: () => setOutputs([]),
+      clearOutputs: () => {
+        if(trimmedCommand.split(' ')[0] === 'clear') {
+          if (trimmedCommand.split(' ').length > 1) {
+            setOutputs([]);
+          } else {
+            clearAndHeader();
+          }
+        } else {
+           setOutputs([]);
+        }
+      },
       setTheme: (newTheme) => {
         if (isTheme(newTheme)) setTheme(newTheme);
       },
@@ -91,11 +110,16 @@ const Terminal = () => {
       clearHistory: () => setHistory([]),
       setShutdown,
       playSound,
-      typingSpeed
+      typingSpeed,
+      showStartupMessages: clearAndHeader,
     });
     
+    if (trimmedCommand !== 'clear' && trimmedCommand !== 'reset' && trimmedCommand !== 'shutdown') {
+      addOutput('', true, `${username}@${hostname}`); // This will be an empty line with a prompt
+    }
+
     setCommandInProgress(false);
-  }, [username, hostname, playSound, addOutput, setTheme, setUsername, setSoundEnabled, setTypingSpeed, setHistory, setShutdown, typingSpeed]);
+  }, [username, hostname, playSound, addOutput, setTheme, setUsername, setSoundEnabled, setTypingSpeed, setHistory, setShutdown, typingSpeed, clearAndHeader]);
   
   const addToHistory = (command: string) => {
     if (command.trim() === '') return;
@@ -131,14 +155,13 @@ const Terminal = () => {
   useEffect(() => {
     if (!shutdown) {
         if (outputs.length === 0) { // Only add initial messages if outputs are empty
-            addOutput(<AsciiHeader />);
-            addOutput(`Type '?' or 'help' to view a list of available commands.`);
+            clearAndHeader();
         }
     } else {
         setOutputs([]);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shutdown]);
+  }, [shutdown, clearAndHeader]);
 
   const handlePowerOn = () => {
     runCommand('poweron');
@@ -161,7 +184,7 @@ const Terminal = () => {
         ) : (
           <>
             {outputs.map((output) => (
-              <div key={output.id} className="output-line">
+              <div key={output.id} className="output-line mb-2">
                 {output.isCommand ? (
                   <div className="flex">
                     <span className="text-accent">{output.command}:~$</span>

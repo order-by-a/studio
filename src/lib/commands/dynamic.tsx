@@ -123,12 +123,17 @@ export const capitalize = async (args: string[]) => {
   return args.join(' ').replace(/\b\w/g, l => l.toUpperCase());
 };
 
-export const clear = async (args: string[], { clearOutputs, clearHistory }) => {
+export const clear = async (args: string[], { clearOutputs, clearHistory, showStartupMessages }) => {
   const mode = args[0] || 'screen';
-  if (mode === 'screen' || mode === 'both') {
-    clearOutputs();
+  if (mode === 'screen') {
+      if (showStartupMessages) showStartupMessages();
   }
-  if (mode === 'history' || mode === 'both') {
+  if (mode === 'history') {
+    clearHistory();
+    return 'History cleared.';
+  }
+  if (mode === 'both') {
+    if (showStartupMessages) showStartupMessages();
     clearHistory();
     return 'History cleared.';
   }
