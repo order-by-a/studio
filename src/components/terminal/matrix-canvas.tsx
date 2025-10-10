@@ -2,7 +2,11 @@
 
 import React, { useRef, useEffect } from 'react';
 
-const MatrixCanvas: React.FC = () => {
+type MatrixCanvasProps = {
+  color?: string;
+};
+
+const MatrixCanvas: React.FC<MatrixCanvasProps> = ({ color = '#0F0' }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -34,7 +38,7 @@ const MatrixCanvas: React.FC = () => {
       ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
       ctx.fillRect(0, 0, width, height);
 
-      ctx.fillStyle = '#0F0';
+      ctx.fillStyle = color;
       ctx.font = `${fontSize}px monospace`;
 
       for (let i = 0; i < rainDrops.length; i++) {
@@ -61,18 +65,12 @@ const MatrixCanvas: React.FC = () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [color]);
 
   return (
     <canvas
       ref={canvasRef}
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        zIndex: -1,
-        opacity: 0.3,
-      }}
+      className="fixed top-0 left-0 h-full w-full bg-black z-50"
     />
   );
 };

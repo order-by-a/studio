@@ -21,6 +21,11 @@ export type Output = {
   command?: string;
 };
 
+type MatrixState = {
+  active: boolean;
+  color: string;
+};
+
 const Terminal = () => {
   const [username, setUsername] = useLocalStorage('terminal-username', 'visitor');
   const [hostname, setHostname] = useLocalStorage('terminal-hostname', 'aayush-xid-su');
@@ -33,6 +38,7 @@ const Terminal = () => {
   const [shutdown, setShutdown] = useLocalStorage('terminal-shutdown', false);
   const [isShuttingDown, setIsShuttingDown] = useState(false);
   const [isPoweringOn, setIsPoweringOn] = useState(false);
+  const [matrix, setMatrix] = useState<MatrixState>({ active: false, color: '#0F0' });
 
   const terminalRef = useRef<HTMLDivElement>(null);
   const promptRef = useRef<PromptHandle>(null);
@@ -118,6 +124,7 @@ const Terminal = () => {
       setShutdown: handleStartShutdown,
       playSound,
       typingSpeed,
+      setMatrix,
     };
 
     await processCommand(cmdName, args, context);
@@ -157,7 +164,12 @@ const Terminal = () => {
   
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-        if (shutdown) return;
+        if (e.key === 'Escape' && matrix.active) {
+          e.preventDefault();
+          setMatrix({ active: false, color: '#0F0' });
+          return;
+        }
+        if (shutdown || matrix.active) return;
         if ((e.ctrlKey || e.metaKey) && (e.key === 'l')) {
             e.preventDefault();
             showHeader();
@@ -165,7 +177,7 @@ const Terminal = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [shutdown, showHeader]);
+  }, [shutdown, showHeader, matrix.active]);
 
   useEffect(() => {
     if (shutdown) {
@@ -174,6 +186,10 @@ const Terminal = () => {
       showHeader();
     }
   }, [shutdown, isPoweringOn, isShuttingDown, outputs.length, showHeader]);
+  
+  if (matrix.active) {
+    return <MatrixCanvas color={matrix.color} />;
+  }
 
   return (
     <>
@@ -185,8 +201,6 @@ const Terminal = () => {
         role="log"
         aria-live="polite"
       >
-        {theme === 'matrix' && !shutdown && !isShuttingDown && <MatrixCanvas />}
-        
         {isPoweringOn ? (
           <PowerOnScreen onFinished={handleFinishPowerOn} />
         ) : isShuttingDown ? (

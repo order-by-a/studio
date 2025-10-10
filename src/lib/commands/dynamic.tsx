@@ -194,16 +194,10 @@ export const lowercase = async (args: string[]) => {
   return args.join(' ').toLowerCase();
 };
 
-export const matrix = async (args: string[], { setTheme }) => {
-    if(typeof window === 'undefined') return '';
-    const currentTheme = window.localStorage.getItem('terminal-theme')?.replace(/"/g, '');
-    if (currentTheme === 'matrix') {
-      setTheme('hacker');
-      return 'Matrix mode disabled.';
-    } else {
-      setTheme('matrix');
-      return 'Matrix mode enabled.';
-    }
+export const matrix = async (args: string[], { setMatrix }) => {
+    const color = args[0] || '#0F0'; // Default to green
+    setMatrix({ active: true, color: color });
+    return 'Entering matrix... Press ESC to exit.';
 };
 
 export const qr = async (args: string[]) => {

@@ -3,6 +3,11 @@ import { staticCommands } from './static';
 import * as apiCmds from './api';
 import * as dynamicCmds from './dynamic';
 
+type MatrixState = {
+    active: boolean;
+    color: string;
+};
+
 type CommandContext = {
     command: string;
     username: string;
@@ -17,6 +22,7 @@ type CommandContext = {
     playSound: (type: 'enter' | 'error') => void;
     typingSpeed: number;
     showStartupMessages?: () => void;
+    setMatrix: (matrix: MatrixState) => void;
 };
 
 type CommandHandler = (args: string[], context: CommandContext) => Promise<React.ReactNode | string | void>;
