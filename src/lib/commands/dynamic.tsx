@@ -311,9 +311,10 @@ export const shutdown = async(args: string[], { setShutdown }) => {
     setShutdown(true);
     return "Shutting down... Type 'poweron' to restart.";
 };
-export const poweron = async(args: string[], { setShutdown, clearOutputs }) => {
-    setShutdown(false);
-    clearOutputs();
+export const poweron = async(args: string[], context) => {
+    // This command is now handled by the UI, but we keep it for compatibility
+    context.setShutdown(false);
+    context.clearOutputs();
     return "System restarted.";
 };
 

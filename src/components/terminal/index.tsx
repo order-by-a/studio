@@ -8,6 +8,7 @@ import AsciiHeader from './ascii-header';
 import Prompt, { type PromptHandle } from './prompt';
 import MatrixCanvas from './matrix-canvas';
 import TopBar from './top-bar';
+import SystemSuspended from './system-suspended';
 
 export type Output = {
   id: number;
@@ -57,25 +58,11 @@ const Terminal = () => {
   }, []);
 
   const runCommand = useCallback(async (command: string) => {
-    if (shutdown) {
-        if (command.trim().toLowerCase() === 'poweron') {
-             processCommand({
-                command: 'poweron',
-                username,
-                addOutput,
-                clearOutputs: () => setOutputs([]),
-                setTheme: (newTheme) => {
-                    if (isTheme(newTheme)) setTheme(newTheme);
-                },
-                setUsername,
-                setSoundEnabled,
-                setTypingSpeed,
-                clearHistory: () => setHistory([]),
-                setShutdown,
-                playSound,
-                typingSpeed
-            });
-        }
+    if (command.trim().toLowerCase() === 'poweron') {
+        setShutdown(false);
+        setOutputs([]); // Clear outputs on poweron
+        addOutput(<AsciiHeader />);
+        addOutput(`Type '?' or 'help' to view a list of available commands.`);
         return;
     }
     
@@ -102,7 +89,7 @@ const Terminal = () => {
     });
     
     setCommandInProgress(false);
-  }, [shutdown, username, hostname, playSound, addOutput, setTheme, setUsername, setSoundEnabled, setTypingSpeed, setHistory, setShutdown, typingSpeed]);
+  }, [username, hostname, playSound, addOutput, setTheme, setUsername, setSoundEnabled, setTypingSpeed, setHistory, setShutdown, typingSpeed]);
   
   const addToHistory = (command: string) => {
     if (command.trim() === '') return;
@@ -122,6 +109,7 @@ const Terminal = () => {
   
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+        if (shutdown) return;
         if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'l')) {
             e.preventDefault();
             runCommand('clear');
@@ -129,23 +117,29 @@ const Terminal = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [runCommand]);
+  }, [runCommand, shutdown]);
 
   useEffect(() => {
     if (!shutdown) {
-      addOutput(<AsciiHeader />);
-      addOutput(`Type '?' or 'help' to view a list of available commands.`);
+        if (outputs.length === 0) { // Only add initial messages if outputs are empty
+            addOutput(<AsciiHeader />);
+            addOutput(`Type '?' or 'help' to view a list of available commands.`);
+        }
     } else {
-      addOutput("System is shut down. Type 'poweron' to restart.");
+        setOutputs([]);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [shutdown]);
 
 
   const handleTerminalClick = () => {
     if (promptRef.current) {
       promptRef.current.focus();
     }
+  };
+
+  const handlePowerOn = () => {
+    runCommand('poweron');
   };
 
   return (
@@ -158,29 +152,35 @@ const Terminal = () => {
         role="log"
         aria-live="polite"
       >
-        {theme === 'matrix' && <MatrixCanvas />}
+        {theme === 'matrix' && !shutdown && <MatrixCanvas />}
         
-        {outputs.map((output) => (
-          <div key={output.id} className="output-line">
-            {output.isCommand ? (
-              <div className="flex">
-                <span className="text-accent">{output.command}:~$</span>
-                <span className="flex-1 pl-2">{output.content}</span>
+        {shutdown ? (
+          <SystemSuspended onPowerOn={handlePowerOn} />
+        ) : (
+          <>
+            {outputs.map((output) => (
+              <div key={output.id} className="output-line">
+                {output.isCommand ? (
+                  <div className="flex">
+                    <span className="text-accent">{output.command}:~$</span>
+                    <span className="flex-1 pl-2">{output.content}</span>
+                  </div>
+                ) : (
+                  output.content
+                )}
               </div>
-            ) : (
-              output.content
+            ))}
+            
+            {!commandInProgress && (
+              <Prompt
+                  ref={promptRef}
+                  username={`${username}@${hostname}`}
+                  onSubmit={runCommand}
+                  history={history}
+                  disabled={false}
+              />
             )}
-          </div>
-        ))}
-        
-        {!commandInProgress && (
-          <Prompt
-              ref={promptRef}
-              username={`${username}@${hostname}`}
-              onSubmit={runCommand}
-              history={history}
-              disabled={shutdown}
-          />
+          </>
         )}
       </div>
     </>

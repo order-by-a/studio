@@ -44,13 +44,7 @@ const Prompt = forwardRef<PromptHandle, PromptProps>(({ username, onSubmit, hist
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (disabled) {
-      if (e.key === 'Enter') {
-          if (input.trim().toLowerCase() === 'poweron') {
-              onSubmit('poweron');
-              setInput('');
-          }
-          e.preventDefault();
-      }
+      e.preventDefault();
       return;
     }
     
@@ -61,7 +55,7 @@ const Prompt = forwardRef<PromptHandle, PromptProps>(({ username, onSubmit, hist
         commandToSubmit = suggestion;
       }
       onSubmit(commandToSubmit);
-      setInput('');
+setInput('');
       setSuggestion('');
       setHistoryIndex(-1);
     } else if (e.key === 'ArrowUp') {
