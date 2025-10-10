@@ -1,5 +1,5 @@
 import React from 'react';
-import * as staticCmds from './static';
+import { staticCommands } from './static';
 import * as apiCmds from './api';
 import * as dynamicCmds from './dynamic';
 import { themes, isTheme, Theme } from '@/lib/themes';
@@ -9,7 +9,7 @@ import CommandOutput from '@/components/terminal/command-output';
 type CommandContext = {
     command: string;
     username: string;
-    addOutput: (content: React.ReactNode) => void;
+    addOutput: (content: React.ReactNode, isCommand?: boolean, command?: string) => void;
     clearOutputs: () => void;
     setTheme: (theme: string) => void;
     setUsername: (username: string) => void;
@@ -24,7 +24,7 @@ type CommandContext = {
 type CommandHandler = (args: string[], context: CommandContext) => Promise<React.ReactNode | string>;
 
 const commands: Record<string, CommandHandler> = {
-    ...staticCmds,
+    ...staticCommands,
     ...apiCmds,
     ...dynamicCmds,
 };

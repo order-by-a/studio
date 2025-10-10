@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useRef, useEffect, useImperativeHandle, forwardRef, useCallback } from 'react';
 import { fuzzyCommandAutocomplete } from '@/ai/flows/fuzzy-command-autocomplete';
-import { commandList } from '@/lib/commands';
+import { commandList } from '@/lib/commands/index.tsx';
 
 interface PromptProps {
   username: string;

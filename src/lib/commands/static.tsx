@@ -88,7 +88,6 @@ export const help = async (args: string[]) => {
   );
 };
 export const commands = help;
-export const '?' = help;
 
 export const ayush = async () => {
     if (typeof window !== 'undefined') {
@@ -175,4 +174,17 @@ export const theme = async () => {
             </ul>
         </div>
     );
+};
+
+
+export const staticCommands = {
+    help,
+    commands,
+    ayush,
+    about,
+    contact,
+    projects,
+    social,
+    theme,
+    '?': help,
 };

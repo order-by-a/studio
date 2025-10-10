@@ -107,7 +107,7 @@ const Terminal = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [runCommand]);
 
   useEffect(() => {
     if (!shutdown) {
