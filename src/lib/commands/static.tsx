@@ -129,51 +129,56 @@ export const about = async () => {
   return (
     <div className="space-y-4">
       <div>
-        <p className="text-accent font-bold text-lg">Ayush Das</p>
-        <p>Cybersecurity Enthusiast</p>
-        <p>Odisha, India</p>
-        <p className="mt-2">I protect systems and data from cyber threats.</p>
-        <p className="mt-2 text-muted-foreground">
-          I’m Ayush Das, a passionate Cybersecurity Enthusiast and BCA student focused on mastering both Offensive and Defensive Security techniques. My journey in tech began with a deep curiosity for bug hunting, ethical hacking, and OSINT investigations, which gradually evolved into building real-world cybersecurity projects that blend code, creativity, and problem-solving. I thrive on challenges and am constantly seeking opportunities to learn and grow in the ever-evolving field of cybersecurity.
+        <p className="text-accent font-bold text-lg">Digital Identity</p>
+        <p>name: "Ayush Das"</p>
+        <p>headline: "Cybersecurity Enthusiast"</p>
+        <p>location: "Odisha, India"</p>
+        <p>shortBio: "I protect systems and data from cyber threats."</p>
+        <p className="mt-2 text-muted-foreground whitespace-pre-wrap">
+{`I’m Ayush Das, a passionate Cybersecurity Enthusiast and BCA student focused on mastering both Offensive and Defensive Security techniques. My journey in tech began with a deep curiosity for bug hunting, ethical hacking, and OSINT investigations, which gradually evolved into building real-world cybersecurity projects that blend code, creativity, and problem-solving. I thrive on challenges and am constantly seeking opportunities to learn and grow in the ever-evolving field of cybersecurity.`}
         </p>
       </div>
 
       <div>
         <p className="text-accent font-bold text-lg">Education</p>
-        <ul className="list-disc list-inside">
-          <li>High school: Navjyoti Vidyalaya (2021) - 84%</li>
-          <li>Higher secondary: The Dronacharya School (2023) - 60%</li>
-          <li>Undergraduation: YCAT (2026) - 8.4 SGPA</li>
-        </ul>
+        <p>degree: "High school", school: "Navjyoti Vidyalaya", year: "2021", percentage: "84"</p>
+        <p>degree: "Higher secondary", school: "The Dronacharya School", year: "2023", percentage: "60"</p>
+        <p>degree: "Undergraduation", college: "YCAT", year: "2026", percentage: "8.4 sgpa"</p>
       </div>
       
       <div>
-        <p className="text-accent font-bold text-lg">Certificates & Courses</p>
+        <p className="text-accent font-bold text-lg">CERTIFICATES</p>
         <ul className="list-disc list-inside">
           <li>Cyber Job Simulation by Deloitte</li>
           <li>ANZ Cyber Security Management</li>
+        </ul>
+      </div>
+
+       <div>
+        <p className="text-accent font-bold text-lg">COURSES</p>
+        <ul className="list-disc list-inside">
           <li>Tata Cybersecurity Analyst Completion Certificate</li>
           <li>Mastercard Cybersecurity Completion Certificate</li>
         </ul>
       </div>
 
       <div>
-        <p className="text-accent font-bold text-lg">Projects</p>
+        <p className="text-accent font-bold text-lg">PROJECTS</p>
         <ul className="list-disc list-inside space-y-2">
           <li>
-            <span className="font-bold">Packet Sniffer based on Java:</span> Developed a network packet sniffer in Java to capture, analyze, and display real-time network traffic, aiding in network monitoring and security analysis.
+            <p><span className="font-bold">Packet Sniffer based on Java:</span> Developed a network packet sniffer in Java to capture, analyze, and display real-time network traffic, aiding in network monitoring and security analysis.</p>
           </li>
           <li>
-            <span className="font-bold">Online Odisha eCommerce website:</span> Designed and developed an e-commerce platform focused on selling traditional and locally-made clothing in Odisha, supporting regional artisans and promoting traditional fashion through a user-friendly online store.
+            <p><span className="font-bold">Online Odisha eCommerce website:</span> Designed and developed an e-commerce platform focused on selling traditional and locally-made clothing in Odisha, supporting regional artisans and promoting traditional fashion through a user-friendly online store.</p>
           </li>
           <li>
-            <span className="font-bold">HTTP Server for Wireless File Transfer:</span> Built a lightweight HTTP server to enable remote file transfer over a network without cables, allowing seamless sharing between devices using only a web browser.
+            <p><span className="font-bold">HTTP Server for Wireless File Transfer:</span> Built a lightweight HTTP server to enable remote file transfer over a network without cables, allowing seamless sharing between devices using only a web browser.</p>
           </li>
           <li>
-            <span className="font-bold">Image Encryption & Decryption Tool:</span> Created a secure tool to encrypt and decrypt images using custom algorithms, ensuring data privacy and protection during storage and transfer.
+            <p><span className="font-bold">Image Encryption & Decryption Tool:</span> Created a secure tool to encrypt and decrypt images using custom algorithms, ensuring data privacy and protection during storage and transfer.</p>
           </li>
            <li>
-            <span className="font-bold">Global Health Expenditure Analysis using Power BI:</span> Analyzed global health spending trends using data visualization and statistical methods to highlight disparities and support policy insights.
+            <p><span className="font-bold">Global Health Expenditure Analysis using Power BI:</span> Analyzed global health spending trends using data visualization and statistical methods to highlight disparities and support policy insights.</p>
           </li>
         </ul>
       </div>
