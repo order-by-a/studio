@@ -33,7 +33,8 @@ export const curl = async (args: string[]) => {
   }
   const content = await actions.curlUrl(url);
   // Show a truncated version if it's too long
-  return content.length > 5000 ? content.substring(0, 5000) + '\n... (truncated)' : content;
+  const output = content.length > 5000 ? content.substring(0, 5000) + '\n... (truncated)' : content;
+  return <pre className="whitespace-pre-wrap">{output}</pre>
 };
 
 export const define = async (args: string[]) => {
@@ -99,7 +100,7 @@ export const ping = async (args: string[]) => {
     if (!args.length) return 'Usage: ping [url]';
     let url = args[0];
     if (!url.startsWith('http')) {
-        url = `https://${url}`;
+        url = `https://` + url;
     }
     const result = await actions.pingUrl(url);
     if (result.error) return result.error;
