@@ -1,6 +1,6 @@
 import React from 'react';
 import { themes } from '@/lib/themes';
-import { commandList } from './index.tsx';
+import { commandList } from './index';
 
 const commandDescriptions: Record<string, string> = {
   '?': 'Alias for help.',
@@ -16,7 +16,7 @@ const commandDescriptions: Record<string, string> = {
   'capitalize': 'Capitalize the first letter of each word in a text. Usage: capitalize [text]',
   'clear': 'Clear the terminal screen, history, or both. Usage: clear [screen|history|both]',
   'coin': 'Flip a virtual coin.',
-  'commands': 'Alias for help.',
+  'commands': 'Show a detailed list of all commands with descriptions.',
   'contact': 'Display my contact information.',
   'countdays': 'Count days from today to a specific date. Usage: countdays YYYY-MM-DD',
   'country': 'Get information about a country. Usage: country [name]',
@@ -73,21 +73,50 @@ export const help = async (args: string[]) => {
   }
 
   const allCommands = commandList.sort();
-  const maxLength = Math.max(...allCommands.map(cmd => cmd.length));
-  const twoColumns = allCommands.map(cmd => {
-    const description = commandDescriptions[cmd]?.split('.')[0] || 'No description available.';
-    return `${cmd.padEnd(maxLength + 4)}${description}`;
-  }).join('\n');
+  const maxLength = Math.max(...allCommands.map(cmd => cmd.length)) + 2; // a little extra padding
+  const numColumns = 4;
+  const numRows = Math.ceil(allCommands.length / numColumns);
+  let output = 'Available commands:\n';
+  const columns: string[][] = Array(numColumns).fill(0).map(() => []);
+
+  for (let i = 0; i < allCommands.length; i++) {
+    columns[Math.floor(i / numRows)].push(allCommands[i]);
+  }
+
+  for (let i = 0; i < numRows; i++) {
+    let row = '';
+    for (let j = 0; j < numColumns; j++) {
+      if (columns[j][i]) {
+        row += columns[j][i].padEnd(maxLength);
+      }
+    }
+    output += row + '\n';
+  }
   
   return (
     <div>
-      <p>Available commands:</p>
-      <pre className="mt-2">{twoColumns}</pre>
+      <pre>{output}</pre>
       <p className="mt-2">Type 'help [command]' for more details on a specific command.</p>
+      <p>Type 'commands' to see a list with descriptions.</p>
     </div>
   );
 };
-export const commands = help;
+
+export const commands = async () => {
+    const allCommands = commandList.sort();
+    const maxLength = Math.max(...allCommands.map(cmd => cmd.length));
+    const commandDetails = allCommands.map(cmd => {
+      const description = commandDescriptions[cmd]?.split('.')[0] || 'No description available.';
+      return `${cmd.padEnd(maxLength + 4)}${description}`;
+    }).join('\n');
+    
+    return (
+        <div>
+            <p>Available commands:</p>
+            <pre className="mt-2">{commandDetails}</pre>
+        </div>
+    );
+};
 
 export const ayush = async () => {
     if (typeof window !== 'undefined') {
