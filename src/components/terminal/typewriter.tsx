@@ -11,16 +11,19 @@ type TypewriterProps = {
 
 const Typewriter = ({ text, speed = 50, className, as: Component = 'div' }: TypewriterProps) => {
   const [displayedText, setDisplayedText] = useState('');
+  const [isFinished, setIsFinished] = useState(false);
   const index = useRef(0);
 
   const isMultiLine = useMemo(() => text.includes('\n'), [text]);
 
   useEffect(() => {
     setDisplayedText('');
+    setIsFinished(false);
     index.current = 0;
     
     if (speed === 0) {
       setDisplayedText(text);
+      setIsFinished(true);
       return;
     }
 
@@ -30,6 +33,7 @@ const Typewriter = ({ text, speed = 50, className, as: Component = 'div' }: Type
         index.current += 1;
       } else {
         clearInterval(intervalId);
+        setIsFinished(true);
       }
     }, speed);
 
@@ -41,7 +45,7 @@ const Typewriter = ({ text, speed = 50, className, as: Component = 'div' }: Type
   return (
     <Component className={className} style={containerStyle}>
       {displayedText}
-      <span className="inline-block w-2 h-4 ml-1 align-middle bg-foreground animate-blink"></span>
+      {!isFinished && <span className="cursor-blink bg-foreground w-2 h-[1.2em] inline-block ml-1 align-middle"></span>}
     </Component>
   );
 };

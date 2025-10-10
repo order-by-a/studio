@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useRef, useEffect, useImperativeHandle, forwardRef, useCallback } from 'react';
 import { fuzzyCommandAutocomplete } from '@/ai/flows/fuzzy-command-autocomplete';
-import { commandList } from '@/lib/commands/index.tsx';
+import { commandList } from '@/lib/commands';
 
 interface PromptProps {
   username: string;
@@ -35,12 +35,18 @@ const Prompt = forwardRef<PromptHandle, PromptProps>(({ username, onSubmit, hist
     if (inputRef.current) {
       const range = document.createRange();
       const sel = window.getSelection();
-      range.selectNodeContents(inputRef.current);
-      range.collapse(false);
+      if (inputRef.current.childNodes.length > 0) {
+        range.setStart(inputRef.current.childNodes[0], input.length);
+      } else {
+        range.selectNodeContents(inputRef.current);
+        range.collapse(false);
+      }
+      range.collapse(true);
       sel?.removeAllRanges();
       sel?.addRange(range);
     }
   };
+
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (disabled) {
@@ -55,7 +61,7 @@ const Prompt = forwardRef<PromptHandle, PromptProps>(({ username, onSubmit, hist
         commandToSubmit = suggestion;
       }
       onSubmit(commandToSubmit);
-setInput('');
+      setInput('');
       setSuggestion('');
       setHistoryIndex(-1);
     } else if (e.key === 'ArrowUp') {
@@ -109,7 +115,7 @@ setInput('');
   }, [input]);
 
   return (
-    <div className="flex w-full" aria-label="Command input">
+    <div className="flex w-full items-center" aria-label="Command input">
       <span className="text-accent shrink-0">{username}:~$</span>
       <div className="relative flex-grow pl-2">
         <div
@@ -117,7 +123,7 @@ setInput('');
           contentEditable={!disabled}
           onInput={handleInputChange}
           onKeyDown={handleKeyDown}
-          className="w-full bg-transparent focus:outline-none z-10 relative"
+          className="w-full bg-transparent focus:outline-none z-10 relative caret-transparent"
           aria-label="command-input"
           autoCapitalize="off"
           autoCorrect="off"
@@ -129,8 +135,15 @@ setInput('');
             <span>{suggestion.substring(input.length)}</span>
           </div>
         )}
+        {!disabled && (
+          <span
+            className="absolute top-0 left-2 pointer-events-none"
+            style={{ transform: `translateX(${input.length}ch)` }}
+          >
+            <span className="cursor-blink bg-foreground w-2 h-[1.2em] inline-block"></span>
+          </span>
+        )}
       </div>
-      {!disabled && <span className="cursor-blink bg-foreground w-2 h-[1.2em] inline-block ml-1"></span>}
     </div>
   );
 });

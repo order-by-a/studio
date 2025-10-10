@@ -235,3 +235,6 @@
 [contenteditable]:focus {
   outline: none;
 }
+.caret-transparent {
+  caret-color: transparent;
+}
