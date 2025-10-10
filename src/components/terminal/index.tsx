@@ -19,7 +19,7 @@ export type Output = {
 
 const Terminal = () => {
   const [username, setUsername] = useLocalStorage('terminal-username', 'visitor');
-  const [hostname, setHostname] = useLocalStorage('terminal-hostname', 'iabhinav.me');
+  const [hostname, setHostname] = useLocalStorage('terminal-hostname', 'aayush-xid-su');
   const [theme, setTheme] = useLocalStorage<Theme>('terminal-theme', 'hacker');
   const [soundEnabled, setSoundEnabled] = useLocalStorage('terminal-sound', true);
   const [typingSpeed, setTypingSpeed] = useLocalStorage('terminal-speed', 20);

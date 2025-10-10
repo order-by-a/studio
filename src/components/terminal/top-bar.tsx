@@ -43,7 +43,7 @@ const TopBar = () => {
                 <span>{weather}</span>
             </div>
             <div>
-                <a href="https://iabhinav.me" target="_blank" rel="noopener noreferrer">https://iabhinav.me</a>
+                <a href="https://www.github.com/aayush-xid-su" target="_blank" rel="noopener noreferrer">https://www.github.com/aayush-xid-su</a>
             </div>
             <div className="flex items-center gap-2">
                 <span>{currentTime}</span>
