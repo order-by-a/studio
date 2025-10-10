@@ -8,6 +8,12 @@ type MatrixState = {
     color: string;
 };
 
+type StopwatchState = {
+    running: boolean;
+    startTime: number;
+    elapsed: number;
+};
+
 type CommandContext = {
     command: string;
     username: string;
@@ -22,7 +28,8 @@ type CommandContext = {
     playSound: (type: 'enter' | 'error') => void;
     typingSpeed: number;
     showStartupMessages?: () => void;
-    setMatrix: (matrix: MatrixState) => void;
+    setMatrix: React.Dispatch<React.SetStateAction<MatrixState>>;
+    setStopwatch: React.Dispatch<React.SetStateAction<StopwatchState>>;
 };
 
 type CommandHandler = (args: string[], context: CommandContext) => Promise<React.ReactNode | string | void>;

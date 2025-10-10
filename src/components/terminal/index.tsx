@@ -26,6 +26,12 @@ type MatrixState = {
   color: string;
 };
 
+type StopwatchState = {
+  running: boolean;
+  startTime: number;
+  elapsed: number;
+};
+
 const Terminal = () => {
   const [username, setUsername] = useLocalStorage('terminal-username', 'visitor');
   const [hostname, setHostname] = useLocalStorage('terminal-hostname', 'aayush-xid-su');
@@ -39,6 +45,7 @@ const Terminal = () => {
   const [isShuttingDown, setIsShuttingDown] = useState(false);
   const [isPoweringOn, setIsPoweringOn] = useState(false);
   const [matrix, setMatrix] = useState<MatrixState>({ active: false, color: '#0F0' });
+  const [stopwatch, setStopwatch] = useState<StopwatchState>({ running: false, startTime: 0, elapsed: 0 });
 
   const terminalRef = useRef<HTMLDivElement>(null);
   const promptRef = useRef<PromptHandle>(null);
@@ -125,22 +132,16 @@ const Terminal = () => {
       playSound,
       typingSpeed,
       setMatrix,
+      setStopwatch,
     };
 
     await processCommand(cmdName, args, context);
     
-    // Special handling for commands that manage the screen state
-    if (cmdName.toLowerCase() === 'shutdown') {
-        // State is already handled by setShutdown triggering the effect
-    } else if (cmdName.toLowerCase() === 'clear') {
+    if (cmdName.toLowerCase() === 'clear') {
        showHeader();
-       setCommandInProgress(false);
-    } else if (cmdName.toLowerCase() === 'reset') {
-        // Let the page reload handle it
     }
-    else {
-      setCommandInProgress(false);
-    }
+    
+    setCommandInProgress(false);
   }, [username, hostname, playSound, addOutput, typingSpeed, setTheme, setUsername, setSoundEnabled, setTypingSpeed, setHistory, showHeader]);
   
   const addToHistory = (command: string) => {
@@ -161,23 +162,46 @@ const Terminal = () => {
     document.body.className = '';
     document.body.classList.add(`theme-${theme}`);
   }, [theme]);
+
+  // Stopwatch timer effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    if (stopwatch.running) {
+      interval = setInterval(() => {
+        setStopwatch(prev => ({ ...prev, elapsed: Date.now() - prev.startTime }));
+      }, 100);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [stopwatch.running]);
   
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape' && matrix.active) {
-          e.preventDefault();
-          setMatrix({ active: false, color: '#0F0' });
-          return;
+        if (e.key === 'Escape') {
+            if (matrix.active) {
+                e.preventDefault();
+                setMatrix({ active: false, color: '#0F0' });
+                return;
+            }
+            if (stopwatch.running) {
+                e.preventDefault();
+                const finalTime = ((Date.now() - stopwatch.startTime) / 1000).toFixed(2);
+                setStopwatch({ running: false, startTime: 0, elapsed: 0 });
+                addOutput(`Stopwatch stopped. Final time: ${finalTime}s`);
+                return;
+            }
         }
-        if (shutdown || matrix.active) return;
+        if (shutdown || matrix.active || stopwatch.running) return;
         if ((e.ctrlKey || e.metaKey) && (e.key === 'l')) {
             e.preventDefault();
+            setOutputs([]);
             showHeader();
         }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [shutdown, showHeader, matrix.active]);
+  }, [shutdown, showHeader, matrix.active, stopwatch, addOutput]);
 
   useEffect(() => {
     if (shutdown) {
@@ -228,8 +252,13 @@ const Terminal = () => {
                   username={`${username}@${hostname}`}
                   onSubmit={runCommand}
                   history={history}
-                  disabled={false}
+                  disabled={stopwatch.running}
               />
+            )}
+            {stopwatch.running && (
+                <div className="fixed bottom-4 left-4 bg-background border border-accent p-2 rounded">
+                    Stopwatch: {(stopwatch.elapsed / 1000).toFixed(2)}s (Press ESC to stop)
+                </div>
             )}
           </>
         )}

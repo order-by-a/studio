@@ -126,14 +126,13 @@ export const capitalize = async (args: string[]) => {
 export const clear = async (args: string[], { clearOutputs, clearHistory, showStartupMessages }) => {
   const mode = args[0] || 'screen';
   if (mode === 'screen') {
-      if (showStartupMessages) showStartupMessages();
+      // Handled in parent
   }
   if (mode === 'history') {
     clearHistory();
     return 'History cleared.';
   }
   if (mode === 'both') {
-    if (showStartupMessages) showStartupMessages();
     clearHistory();
     return 'History cleared.';
   }
@@ -325,36 +324,17 @@ export const poweron = async(args: string[], context) => {
     return "System restarted.";
 };
 
-let stopwatchInterval: NodeJS.Timeout | null = null;
-let stopwatchStartTime = 0;
 export const stopwatch = async (args: string[], context) => {
     const op = args[0] || 'start';
-    switch(op) {
-        case 'start':
-            if(stopwatchInterval) return "Stopwatch already running.";
-            stopwatchStartTime = Date.now();
-            stopwatchInterval = setInterval(() => {
-                const elapsed = ((Date.now() - stopwatchStartTime) / 1000).toFixed(1);
-                // This is a bit of a hack to update the output in place. A proper implementation would use a more reactive system.
-                // For this project, we'll just log to console for live updates.
-                // A better UI could re-render the last output line.
-                // For now, this is a limitation. The final time will be on 'stop'.
-            }, 100);
-            return "Stopwatch started.";
-        case 'stop':
-            if(!stopwatchInterval) return "Stopwatch not running.";
-            clearInterval(stopwatchInterval);
-            stopwatchInterval = null;
-            const elapsed = ((Date.now() - stopwatchStartTime) / 1000).toFixed(2);
-            return `Stopwatch stopped. Elapsed time: ${elapsed}s`;
-        case 'reset':
-             if (stopwatchInterval) clearInterval(stopwatchInterval);
-             stopwatchInterval = null;
-             stopwatchStartTime = 0;
-             return "Stopwatch reset.";
-        default:
-            return "Usage: stopwatch [start|stop|reset]";
+    if (op === 'start') {
+        context.setStopwatch(prev => {
+            if(prev.running) return prev;
+            return { running: true, startTime: Date.now(), elapsed: 0 }
+        });
+        return 'Stopwatch started... Press ESC to stop.';
     }
+    // The "stop" functionality is now handled by the ESC key.
+    return 'Usage: stopwatch start';
 };
 
 export const sysinfo = async () => {
