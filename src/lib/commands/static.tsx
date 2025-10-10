@@ -51,7 +51,6 @@ const commandDescriptions: Record<string, string> = {
   'stock': 'Get stock quote information. Usage: stock [ticker]',
   'stopwatch': 'A simple stopwatch. Usage: stopwatch [start|stop|reset]',
   'synonym': 'Find synonyms for a word. Usage: synonym [word]',
-  'sysinfo': 'Display system information.',
   'theme': 'List all available themes.',
   'time': 'Display the current time or time in a specific timezone. Usage: time [timezone?]',
   'timer': 'Set a countdown timer. Usage: timer [seconds|hh:mm:ss]',

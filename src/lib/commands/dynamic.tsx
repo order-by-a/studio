@@ -2,6 +2,7 @@ import React from 'react';
 import { isTheme, themes } from '@/lib/themes';
 import figlet from 'figlet';
 import qrcode from 'qrcode';
+import * as actions from '@/app/actions';
 
 // Helper for date parsing
 const parseDate = (dateStr: string): Date | null => {
@@ -337,11 +338,6 @@ export const stopwatch = async (args: string[], context) => {
     return 'Usage: stopwatch start';
 };
 
-export const sysinfo = async () => {
-    if(typeof window === 'undefined') return 'Not available on server.';
-    return `User Agent: ${navigator.userAgent}\nScreen: ${window.screen.width}x${window.screen.height}\nPlatform: ${navigator.platform}\nCookies Enabled: ${navigator.cookieEnabled}`;
-};
-
 export const time = async (args: string[]) => {
     const timezone = args[0];
     try {
@@ -460,5 +456,33 @@ export const uuid = async () => {
 };
 
 export const whoami = async (args: string[], context) => {
-    return `User: ${context.username}\n${await sysinfo()}`;
+    if (typeof window === 'undefined') return 'This command is only available on the client.';
+
+    const getBrowser = () => {
+        const ua = navigator.userAgent;
+        if (ua.includes("Firefox")) return "Mozilla Firefox";
+        if (ua.includes("SamsungBrowser")) return "Samsung Internet";
+        if (ua.includes("Opera") || ua.includes("OPR")) return "Opera";
+        if (ua.includes("Trident")) return "Microsoft Internet Explorer";
+        if (ua.includes("Edge")) return "Microsoft Edge";
+        if (ua.includes("Chrome")) return "Google Chrome or Chromium";
+        if (ua.includes("Safari")) return "Apple Safari";
+        return "Unknown";
+    }
+
+    const ipInfo: any = await actions.getIpInfo();
+    const isp = (ipInfo.error || ipInfo.status === 'fail') ? 'Unknown' : ipInfo.isp;
+    const isMobile = window.innerWidth < 768;
+
+    const info = [
+        `User: ${context.username}`,
+        `OS: ${navigator.platform}`,
+        `Browser: ${getBrowser()}`,
+        `User Agent: ${navigator.userAgent}`,
+        `Resolution: ${window.screen.width}x${window.screen.height}`,
+        `Device Type: ${isMobile ? 'Mobile/Tablet' : 'Desktop/Laptop'}`,
+        `Internet Provider: ${isp}`,
+    ];
+
+    return info.join('\n');
 };
