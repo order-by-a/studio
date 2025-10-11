@@ -280,18 +280,16 @@ export const set = async (args: string[], { setTheme, setUsername, setSoundEnabl
 
     if (!key) {
         return `Usage:
-set <theme|username|sound|speed> [value]
-set theme - list available themes
-set theme <theme_name> - change the terminal theme
-set username <name> - set a new username
-set sound <on|off> - toggle sound effects
-set speed <ms> - set typing speed in milliseconds`;
+set theme <theme_name>   - Change the terminal theme. Use 'theme' to list options.
+set username <name>      - Set a new username.
+set sound <on|off>       - Toggle sound effects.
+set speed <ms>           - Set typing speed in milliseconds (0 for instant).`;
     }
 
     switch (key) {
         case 'theme':
             if (!value) {
-                return `Available themes: ${themes.join(', ')}`;
+                return `Usage: set theme <theme_name>. Use the 'theme' command to see available themes.`;
             }
             if (isTheme(value)) {
                 setTheme(value);

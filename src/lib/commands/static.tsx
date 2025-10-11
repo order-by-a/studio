@@ -47,7 +47,7 @@ const commandDescriptions: Record<string, string> = {
   'social': 'Display links to my social media profiles.',
   'stopwatch': 'A simple stopwatch. Usage: stopwatch [start|stop|reset]',
   'sysinfo': 'Displays detailed system and IP information.',
-  'theme': 'List available themes or set a theme. Usage: theme [theme-name?]',
+  'theme': 'List available themes.',
   'time': 'Display the current time or time in a specific timezone. Usage: time [timezone?]',
   'timer': 'Set a countdown timer. Usage: timer [seconds|hh:mm:ss]',
   'uptime': 'Show terminal session uptime.',
@@ -217,23 +217,14 @@ export const social = async (args: string[]) => {
     )
 };
 
-export const theme = async (args: string[], { setTheme }: any) => {
-    if (args.length > 0) {
-        const selectedTheme = args[0];
-        if (isTheme(selectedTheme)) {
-            setTheme(selectedTheme);
-            return `Theme set to ${selectedTheme}.`;
-        }
-        return `Invalid theme. Available: ${themes.join(', ')}`;
-    }
-
+export const theme = async () => {
     return (
         <div>
             <p>Available themes:</p>
             <ul className="list-disc list-inside grid grid-cols-3 gap-x-4">
                 {themes.map(t => <li key={t}>{t}</li>)}
             </ul>
-            <p className="mt-2">Usage: set theme [theme-name] or theme [theme-name]</p>
+            <p className="mt-2">Usage: set theme [theme-name]</p>
         </div>
     );
 };
