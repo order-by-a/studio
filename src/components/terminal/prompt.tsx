@@ -127,36 +127,41 @@ const Prompt = forwardRef<PromptHandle, PromptProps>(({ promptText, onSubmit, hi
 
   return (
     <div>
-        <div className="relative flex w-full items-center" aria-label="Command input">
-          <span className="text-green-500 shrink-0">{promptText}</span>
-          <div className="relative flex-grow pl-2">
+      <div className="flex w-full items-center" aria-label="Command input" onClick={() => inputRef.current?.focus()}>
+        <span className="text-green-500 shrink-0">{promptText}</span>
+        <div className="relative flex-grow pl-2 flex items-center">
             <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-              className="w-full bg-transparent focus:outline-none z-10 relative"
-              aria-label="command-input"
-              autoCapitalize="off"
-              autoCorrect="off"
-              spellCheck="false"
-              disabled={disabled}
+            ref={inputRef}
+            type="text"
+            value={input}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            className="bg-transparent focus:outline-none z-10 relative w-full"
+            aria-label="command-input"
+            autoCapitalize="off"
+            autoCorrect="off"
+            spellCheck="false"
+            disabled={disabled}
             />
             {suggestion && input && (
-              <div className="absolute top-0 left-2 text-muted-foreground pointer-events-none">
-                  <span className="text-transparent">{input}</span>
-                  <span>{suggestion.substring(input.length)}</span>
+            <div className="absolute top-0 left-2 text-muted-foreground pointer-events-none">
+                <span className="text-transparent">{input}</span>
+                <span>{suggestion.substring(input.length)}</span>
+            </div>
+            )}
+            {!disabled && (
+              <div className='absolute top-0 left-2 pointer-events-none h-full flex items-center'>
+                 <span className='text-transparent'>{input}</span>
+                 <span className="cursor-blink" />
               </div>
             )}
-            {!disabled && <span className="cursor-blink" />}
         </div>
       </div>
-        {autocompleteSuggestions.length > 0 && input.trim() && (
-            <div className="pl-2 mt-1 text-muted-foreground text-sm">
-                Suggestions: {autocompleteSuggestions.join(' | ')}
-            </div>
-        )}
+      {autocompleteSuggestions.length > 0 && input.trim() && (
+          <div className="pl-2 mt-1 text-muted-foreground text-sm">
+              Suggestions: {autocompleteSuggestions.join(' | ')}
+          </div>
+      )}
     </div>
   );
 });
