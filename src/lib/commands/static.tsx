@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { themes } from '@/lib/themes';
 import { commandList } from './index';
@@ -248,21 +249,36 @@ export const contact = async () => {
 
 export const projects = async () => {
     return (
-        <div>
-            <p className="text-accent">My Projects:</p>
-            <ul className="list-disc list-inside">
+        <div className="space-y-4">
+            <div>
+                <p>Here are the highlight of some my projects</p>
+                <p>you can find more on my github [<a href="https://github.com/aayush-xid-su" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su</a>]</p>
+            </div>
+            <ol className="list-decimal list-inside space-y-3">
                 <li>
-                    <span>Aura:</span> A privacy-focused location sharing app.
-                    <a href="https://github.com/ayushs-2k1/aura" target="_blank" rel="noopener noreferrer" className="text-accent underline ml-2">[GitHub]</a>
+                    <p><span className="font-bold">Packet Sniffer based on Java</span></p>
+                    <p>Developed a network packet sniffer in Java to capture, analyze, and display real-time network traffic, aiding in network monitoring and security analysis.</p>
                 </li>
                 <li>
-                    <span>Portfolio Terminal:</span> The very terminal you are using right now.
-                    <a href="https://github.com/ayushs-2k1/terminal-portfolio" target="_blank" rel="noopener noreferrer" className="text-accent underline ml-2">[GitHub]</a>
+                    <p><span className="font-bold">Online Odisha eCommerce website</span> [<a href="https://github.com/aayush-xid-su/ewebsite" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su/ewebsite</a>]</p>
+                    <p>Designed and developed an e-commerce platform focused on selling traditional and locally-made clothing in Odisha, supporting regional artisans and promoting traditional fashion through a user-friendly online store.</p>
                 </li>
                 <li>
-                    <span>More projects on my GitHub profile...</span>
+                    <p><span className="font-bold">Chess based encryption–decryption</span> [<a href="https://github.com/aayush-xid-su/C4Crypt" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su/C4Crypt</a>]</p>
+                    <p>C4Crypt is a web-based encryption tool that converts text into chess move sequences using a custom cipher algorithm. Built with HTML, CSS, and JavaScript, it combines cryptography and creative logic to provide an interactive encryption–decryption experience.</p>
                 </li>
-            </ul>
+                <li>
+                    <p><span className="font-bold">Deck of card encryption–decryption</span> [<a href="https://github.com/aayush-xid-su/CardCrypt" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su/CardCrypt</a>]</p>
+                    <p>CardCrypt is a web-based encryption tool that encodes messages using a card-based cipher mechanism. it transforms plaintext into sequences or combinations influenced by card logic and supports decryption back into the original message.</p>
+                </li>
+                <li>
+                    <p><span className="font-bold">HTTP Server for Wireless File Transfer</span> [<a href="https://github.com/aayush-xid-su/http-server" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su/http-server</a>]</p>
+                    <p>Built a lightweight HTTP server to enable remote file transfer over a network without cables, allowing seamlesssharing between devices using only a web browser.</p>
+                </li>
+            </ol>
+             <div>
+                <p>You can view more projects on my GITHUB <a href="https://github.com/aayush-xid-su/" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su/</a></p>
+            </div>
         </div>
     );
 };
@@ -320,3 +336,5 @@ export const staticCommands = {
     man,
     '?': help,
 };
+
+    
