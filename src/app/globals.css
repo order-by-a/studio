@@ -91,7 +91,7 @@
 /* Use the native caret and style it */
 input {
   caret-shape: block;
-  caret-color: hsl(var(--foreground));
+  caret-color: hsl(var(--primary));
 }
 
 input:focus {
@@ -100,4 +100,14 @@ input:focus {
 
 .caret-transparent {
   caret-color: transparent;
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
 }

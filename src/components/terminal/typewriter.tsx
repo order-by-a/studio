@@ -57,7 +57,7 @@ const Typewriter = ({ text, speed = 50, className, as: Component = 'div', onFini
   return (
     <Component className={cn("whitespace-pre-wrap", className)} style={containerStyle}>
       {displayedText}
-      {!isFinished && <span className="cursor-blink bg-foreground w-2 h-[1.2em] inline-block ml-1 align-middle"></span>}
+      {!isFinished && <span className="cursor-blink bg-primary w-2 h-[1.2em] inline-block ml-1 align-middle"></span>}
     </Component>
   );
 };
