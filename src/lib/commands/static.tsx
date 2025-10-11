@@ -93,9 +93,9 @@ export const help = async (args: string[]) => {
       <p className="mt-2">Type 'help [command]' for more details on a specific command.</p>
       <p>Type 'commands' to see a list with descriptions.</p>
       <p>Type 'man [command]' to see a detailed manual for a command.</p>
-      <div className="mt-2">
-        <p>This terminal has a virtual file system. Use `ls`, `cd`, and `cat` to explore.</p>
+       <div className="mt-2">
         <p>Available folders: home, admin, bin, etc, usr, root</p>
+        <p>Use `cd`, `ls`, and `cat` to explore.</p>
       </div>
     </div>
   );
@@ -259,5 +259,3 @@ export const staticCommands = {
     man,
     '?': help,
 };
-
-    
