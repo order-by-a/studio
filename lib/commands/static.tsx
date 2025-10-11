@@ -8,6 +8,7 @@ export const commandDescriptions: Record<string, string> = {
   '?': 'Alias for help.',
   about: 'Displays my biography, education, and skills.',
   age: 'Calculate age from a given date. Usage: age YYYY-MM-DD',
+  ai: 'Get AI-powered command suggestions. Usage: ai [partial command]',
   ascii: 'Convert text to ASCII art. Usage: ascii [text] [font?]',
   asciiqr: 'Generate an ASCII QR code from text. Usage: asciiqr [text]',
   ayush: 'Opens my personal portfolio website in a new tab.',
