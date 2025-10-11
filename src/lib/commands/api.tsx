@@ -16,25 +16,29 @@ export const antonym = async (args: string[]) => {
 };
 
 export const country = async (args: string[]) => {
-  if (!args.length) return 'Usage: country [name]';
-  const name = args.join(' ');
+  let name = args.join(' ');
+  if (!name) {
+    const ipData: any = await actions.getIpInfo();
+    if (ipData.error || ipData.status === 'fail') {
+      return `Could not determine your country from your IP. Please specify a country. Usage: country [name]`;
+    }
+    name = ipData.country;
+  }
+  
   const data = await actions.getCountryInfo(name);
   if (data.error) return data.error;
   const currencyInfo = Object.values(data.currencies || {}).map((c: any) => `${c.name} (${c.symbol})`).join(', ');
   return `Country: ${data.name.common}\nCapital: ${data.capital?.[0]}\nPopulation: ${data.population.toLocaleString()}\nRegion: ${data.region}\nCurrencies: ${currencyInfo}`;
 };
 
-export const curl = async (args: string[]) => {
+export const curl = async (args: string[], context) => {
   if (!args.length) return 'Usage: curl [url]';
   let url = args[0];
-  // Add protocol if missing for server-side fetch
   if (!/^https?:\/\//i.test(url)) {
     url = 'https://' + url;
   }
   const content = await actions.curlUrl(url);
-  // Show a truncated version if it's too long
-  const output = content.length > 5000 ? content.substring(0, 5000) + '\n... (truncated)' : content;
-  return <pre className="whitespace-pre-wrap">{output}</pre>
+  context.addOutput(<pre className="whitespace-pre-wrap">{content}</pre>);
 };
 
 export const define = async (args: string[]) => {
@@ -54,10 +58,29 @@ export const define = async (args: string[]) => {
 export const dns = async (args: string[]) => {
     if (!args.length) return 'Usage: dns [domain]';
     const domain = args[0];
-    const data: any = await actions.getDnsInfo(domain);
-    if (data.error || !data.Answer) return data.error || 'No DNS records found.';
-    const ips = data.Answer.filter((rec: any) => rec.type === 1).map((rec: any) => rec.data).join(', ');
-    return `A records for ${domain}: ${ips}`;
+    
+    const [aData, aaaaData]: [any, any] = await Promise.all([
+      actions.getDnsInfo(domain),
+      actions.getDnsInfo(`${domain}&type=AAAA`)
+    ]);
+
+    let output = '';
+
+    if (aData.Answer) {
+      const ips = aData.Answer.filter((rec: any) => rec.type === 1).map((rec: any) => rec.data).join('\n');
+      output += `IPv4 (A records) for ${domain}:\n${ips}\n`;
+    } else {
+      output += `No IPv4 (A records) found for ${domain}.\n`;
+    }
+
+    if (aaaaData.Answer) {
+      const ips = aaaaData.Answer.filter((rec: any) => rec.type === 28).map((rec: any) => rec.data).join('\n');
+      output += `\nIPv6 (AAAA records) for ${domain}:\n${ips}`;
+    } else {
+      output += `\nNo IPv6 (AAAA records) found for ${domain}.`;
+    }
+
+    return output;
 };
 export const dnslookup = dns;
 
@@ -71,7 +94,7 @@ export const geo = async (args: string[]) => {
 };
 
 export const github = async (args: string[]) => {
-    const username = args[0] || 'ayushs-2k1';
+    const username = args[0] || 'aayush-xid-su';
     const data: any = await actions.getGithubInfo(username);
     if (data.error || data.message) return data.error || `User ${username} not found.`;
     return `GitHub user: ${data.login}\nName: ${data.name}\nBio: ${data.bio}\nFollowers: ${data.followers}\nFollowing: ${data.following}\nPublic Repos: ${data.public_repos}\nProfile: ${data.html_url}`;
@@ -188,4 +211,8 @@ export const weather = async (args: string[], context) => {
            `Wind: ${current.windspeedKmph} km/h from ${current.winddir16Point}\n` +
            `Humidity: ${current.humidity}%\n` +
            `Today's forecast: ${today.hourly[4].weatherDesc[0].value}, high of ${today.maxtempC}°C, low of ${today.mintempC}°C`;
+};
+
+export const sysinfo = async (args: string[], context) => {
+    return dynamicCmds.whoami(args, context);
 };

@@ -89,10 +89,7 @@ export const calendar = async (args: string[]) => {
         const dateString = args.join(' ');
         const parsedDate = new Date(dateString);
         
-        // Check if the parsed date is valid
         if (!isNaN(parsedDate.getTime())) {
-             // If user only passes a year, it might be interpreted as month 0.
-             // We want to show an error for this case to guide them.
             if (/^\d{4}$/.test(dateString.trim())) {
                  return 'Invalid format. Usage: calendar [month year] (e.g., "september 2025") or leave blank.';
             }
@@ -123,9 +120,7 @@ export const calendar = async (args: string[]) => {
                 break;
             } else {
                 let dayStr = day.toString().padStart(2, ' ');
-                // Highlight the current day
                 if (day === now.getDate() && month === now.getMonth() && year === now.getFullYear()) {
-                     // Using basic inversion. For better styling, would need component changes.
                      row += `\x1b[7m${dayStr}\x1b[0m `;
                 } else {
                     row += `${dayStr} `;
@@ -174,7 +169,7 @@ export const countdays = async (args: string[]) => {
   return `Today is ${args[0]}!`;
 };
 
-export const date = async () => new Date().toDateString();
+export const date = async () => new Date().toLocaleString();
 
 export const dice = async (args: string[]) => {
   const sides = args[0] ? parseInt(args[0], 10) : 6;
@@ -216,7 +211,7 @@ export const lowercase = async (args: string[]) => {
 };
 
 export const matrix = async (args: string[], { setMatrix }) => {
-    const color = args[0] || '#0F0'; // Default to green
+    const color = args[0] || '#0F0';
     setMatrix({ active: true, color: color });
     return 'Entering matrix... Press ESC to exit.';
 };
@@ -248,7 +243,7 @@ export const remind = async (args: string[], context) => {
 export const reset = async (args: string[], { setShutdown }) => {
     if(typeof window !== 'undefined') {
         window.localStorage.clear();
-        setShutdown(false); // Make sure it's not stuck in shutdown mode
+        setShutdown(false);
         window.location.reload();
     }
     return "Resetting terminal...";
@@ -335,12 +330,11 @@ export const set = async (args: string[], { setTheme, setUsername, setSoundEnabl
 };
 
 export const shutdown = async (args: string[], { setShutdown }) => {
-  setShutdown(true); // This now triggers the shutdown screen in the UI
+  setShutdown(true);
 };
 
 
 export const poweron = async(args: string[], context) => {
-    // This command is now handled by the UI, but we keep it for compatibility
     context.setShutdown(false);
     context.clearOutputs();
     return "System restarted.";
@@ -355,7 +349,6 @@ export const stopwatch = async (args: string[], context) => {
         });
         return 'Stopwatch started... Press ESC to stop.';
     }
-    // The "stop" functionality is now handled by the ESC key.
     return 'Usage: stopwatch start';
 };
 
