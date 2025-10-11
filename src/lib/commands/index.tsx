@@ -5,6 +5,7 @@ import * as dynamicCmds from './dynamic';
 import * as fsCmds from './fs';
 import { sysinfo } from './sysinfo';
 import { Directory } from '@/lib/filesystem';
+import { Theme } from '@/lib/themes';
 
 type MatrixState = {
     active: boolean;
@@ -22,7 +23,7 @@ export type CommandContext = {
     username: string;
     addOutput: (content: React.ReactNode) => void;
     clearOutputs: () => void;
-    setTheme: (theme: string) => void;
+    setTheme: (theme: Theme) => void;
     setUsername: (username: string) => void;
     setSoundEnabled: (enabled: boolean) => void;
     setTypingSpeed: (speed: number) => void;

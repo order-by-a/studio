@@ -1,8 +1,9 @@
 import React from 'react';
-import { isTheme, themes } from '@/lib/themes';
+import { isTheme, themes, Theme } from '@/lib/themes';
 import figlet from 'figlet';
 import qrcode from 'qrcode';
 import * as actions from '@/app/actions';
+import { CommandContext } from '.';
 
 // Helper for date parsing
 const parseDate = (dateStr: string): Date | null => {
@@ -138,7 +139,7 @@ export const calendar = async (args: string[]) => {
     return <pre className="whitespace-pre-wrap">{header + calendarGrid}</pre>;
 };
 
-export const clear = async (args: string[], { clearOutputs, clearHistory, showStartupMessages }) => {
+export const clear = async (args: string[], { clearHistory }: CommandContext) => {
   const mode = args[0] || 'screen';
   if (mode === 'screen') {
       // Handled in parent
@@ -187,7 +188,7 @@ export const hash = async (args: string[]) => {
     return `SHA-256: ${hashHex}`;
 };
 
-export const history = async (args: string[], context) => {
+export const history = async (args: string[], context: CommandContext) => {
     if (typeof window === 'undefined') return 'History is not available on the server.';
     const historyStr = window.localStorage.getItem('terminal-history');
     if (!historyStr) return 'No history found.';
@@ -196,7 +197,7 @@ export const history = async (args: string[], context) => {
     return <pre className="whitespace-pre-wrap">{history.slice(0, count).reverse().join('\n')}</pre>;
 };
 
-export const matrix = async (args: string[], { setMatrix }) => {
+export const matrix = async (args: string[], { setMatrix }: CommandContext) => {
     const color = args[0] || '#0F0';
     setMatrix({ active: true, color: color });
     return 'Entering matrix... Press ESC to exit.';
@@ -214,7 +215,7 @@ export const qr = async (args: string[]) => {
     }
 };
 
-export const remind = async (args: string[], context) => {
+export const remind = async (args: string[], context: CommandContext) => {
     if(args.length < 2) return "Usage: remind [seconds] [message]";
     const seconds = parseInt(args[0], 10);
     if(isNaN(seconds)) return "Invalid number of seconds.";
@@ -226,7 +227,7 @@ export const remind = async (args: string[], context) => {
     return `Reminder set for ${seconds} seconds.`;
 };
 
-export const reset = async (args: string[], { setShutdown }) => {
+export const reset = async (args: string[], { setShutdown }: CommandContext) => {
     if(typeof window !== 'undefined') {
         window.localStorage.clear();
         setShutdown(false);
@@ -274,13 +275,13 @@ export const rps = async (args: string[]) => {
 };
 
 
-export const set = async (args: string[], { setTheme, setUsername, setSoundEnabled, setTypingSpeed }) => {
+export const set = async (args: string[], { setTheme, setUsername, setSoundEnabled, setTypingSpeed }: CommandContext) => {
     const [key, ...valueParts] = args;
     const value = valueParts.join(' ');
 
     if (!key) {
         return `Usage:
-set theme <theme_name>   - Change the terminal theme. Use 'theme' to list options.
+set theme <theme_name>   - Change the terminal theme.
 set username <name>      - Set a new username.
 set sound <on|off>       - Toggle sound effects.
 set speed <ms>           - Set typing speed in milliseconds (0 for instant).`;
@@ -292,7 +293,7 @@ set speed <ms>           - Set typing speed in milliseconds (0 for instant).`;
                 return `Usage: set theme <theme_name>. Use the 'theme' command to see available themes.`;
             }
             if (isTheme(value)) {
-                setTheme(value);
+                setTheme(value as Theme);
                 return `Theme set to ${value}.`;
             }
             return `Invalid theme. Available: ${themes.join(', ')}`;
@@ -323,18 +324,18 @@ set speed <ms>           - Set typing speed in milliseconds (0 for instant).`;
     }
 };
 
-export const shutdown = async (args: string[], { setShutdown }) => {
+export const shutdown = async (args: string[], { setShutdown }: CommandContext) => {
   setShutdown(true);
 };
 
 
-export const poweron = async(args: string[], context) => {
+export const poweron = async(args: string[], context: CommandContext) => {
     context.setShutdown(false);
     context.clearOutputs();
     return "System restarted.";
 };
 
-export const stopwatch = async (args: string[], context) => {
+export const stopwatch = async (args: string[], context: CommandContext) => {
     const op = args[0] || 'start';
     if (op === 'start') {
         context.setStopwatch(prev => {
@@ -374,7 +375,7 @@ export const time = async (args: string[]) => {
 };
 
 let countdownInterval: NodeJS.Timeout | null = null;
-export const timer = async (args: string[], context) => {
+export const timer = async (args: string[], context: CommandContext) => {
     if (countdownInterval) {
         clearInterval(countdownInterval);
         countdownInterval = null;
@@ -419,7 +420,7 @@ export const uptime = async () => {
     return `Session uptime: ${hours}h ${minutes}m ${seconds}s`;
 };
 
-export const username = async (args: string[], context) => {
+export const username = async (args: string[], context: CommandContext) => {
     return `Current username is: ${context.username}`;
 };
 
@@ -430,7 +431,7 @@ export const uuid = async () => {
     return 'Crypto API not available.';
 };
 
-export const whoami = async (args: string[], context) => {
+export const whoami = async (args: string[], context: CommandContext) => {
     if (typeof window === 'undefined') return 'This command is only available on the client.';
 
     const getBrowser = () => {

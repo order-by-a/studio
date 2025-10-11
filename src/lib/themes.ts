@@ -6,6 +6,6 @@ export const themes = [
   "matrix",
 ];
 
-export type Theme = (typeof themes)[number];
+export type Theme = "blood" | "dark" | "light" | "cosmic" | "matrix";
 
 export const isTheme = (theme: string): theme is Theme => themes.includes(theme);
