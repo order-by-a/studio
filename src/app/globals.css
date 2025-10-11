@@ -39,7 +39,7 @@
   :root,
   .theme-hacker {
     --background-hsl: 0 0% 0%;
-    --foreground-hsl: 120 100% 50%;
+    --foreground-hsl: 0 0% 100%;
     --accent-hsl: 120 100% 40%;
     --border-hsl: 120 100% 50%;
   }
