@@ -41,6 +41,8 @@ export type CommandContext = {
 
 type CommandHandler = (args: string[], context: CommandContext) => Promise<React.ReactNode | string | void>;
 
+const forbiddenCommands = ['sudo', 'passwd', 'su', 'useradd', 'adduser', 'chmod', 'install', 'rm'];
+
 const commands: Record<string, CommandHandler> = {
     ...staticCommands,
     ...apiCmds,
@@ -57,13 +59,21 @@ const showError = (cmd: string, context: CommandContext) => {
 }
 
 export const processCommand = async (cmd: string, args: string[], context: CommandContext) => {
-    const { addOutput } = context;
+    const { addOutput, playSound } = context;
 
     if (!cmd) {
         return;
     }
     
-    let handler = commands[cmd.toLowerCase()];
+    const lowerCmd = cmd.toLowerCase();
+
+    if (forbiddenCommands.includes(lowerCmd)) {
+        addOutput("You don't have permission to use this command.");
+        playSound('error');
+        return;
+    }
+
+    let handler = commands[lowerCmd];
 
     if (!handler) {
         const outputContent = showError(cmd, context);
@@ -81,6 +91,6 @@ export const processCommand = async (cmd: string, args: string[], context: Comma
         const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
         const outputContent = `Error executing '${cmd}': ${errorMessage}`;
         addOutput(outputContent);
-        context.playSound('error');
+        playSound('error');
     }
 };
