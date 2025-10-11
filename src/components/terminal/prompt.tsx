@@ -4,7 +4,7 @@ import { fuzzyCommandAutocomplete } from '@/ai/flows/fuzzy-command-autocomplete'
 import { commandList } from '@/lib/commands';
 
 interface PromptProps {
-  username: string;
+  promptText: string;
   onSubmit: (command: string) => void;
   history: string[];
   disabled?: boolean;
@@ -14,7 +14,7 @@ export interface PromptHandle {
   focus: () => void;
 }
 
-const Prompt = forwardRef<PromptHandle, PromptProps>(({ username, onSubmit, history, disabled }, ref) => {
+const Prompt = forwardRef<PromptHandle, PromptProps>(({ promptText, onSubmit, history, disabled }, ref) => {
   const [input, setInput] = useState('');
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [suggestion, setSuggestion] = useState('');
@@ -161,7 +161,7 @@ const Prompt = forwardRef<PromptHandle, PromptProps>(({ username, onSubmit, hist
   return (
     <div>
         <div className="flex w-full items-center" aria-label="Command input">
-        <span className="text-accent shrink-0">{username}:~$</span>
+        <span className="text-accent shrink-0">{promptText}</span>
         <div className="relative flex-grow pl-2">
             <div
             ref={inputRef}

@@ -2,7 +2,9 @@ import React from 'react';
 import { staticCommands } from './static';
 import * as apiCmds from './api';
 import * as dynamicCmds from './dynamic';
+import * as fsCmds from './fs';
 import { sysinfo } from './sysinfo';
+import { Directory } from '@/lib/filesystem';
 
 type MatrixState = {
     active: boolean;
@@ -15,7 +17,7 @@ type StopwatchState = {
     elapsed: number;
 };
 
-type CommandContext = {
+export type CommandContext = {
     command: string;
     username: string;
     addOutput: (content: React.ReactNode) => void;
@@ -31,6 +33,10 @@ type CommandContext = {
     showStartupMessages?: () => void;
     setMatrix: React.Dispatch<React.SetStateAction<MatrixState>>;
     setStopwatch: React.Dispatch<React.SetStateAction<StopwatchState>>;
+    currentDirectory: Directory;
+    setCurrentDirectory: (dir: Directory) => void;
+    currentPath: string;
+    setCurrentPath: (path: string) => void;
 };
 
 type CommandHandler = (args: string[], context: CommandContext) => Promise<React.ReactNode | string | void>;
@@ -39,6 +45,7 @@ const commands: Record<string, CommandHandler> = {
     ...staticCommands,
     ...apiCmds,
     ...dynamicCmds,
+    ...fsCmds,
     sysinfo,
 };
 
@@ -59,14 +66,9 @@ export const processCommand = async (cmd: string, args: string[], context: Comma
     let handler = commands[cmd.toLowerCase()];
 
     if (!handler) {
-        // Special handling for theme for convenience
-        if (cmd.toLowerCase() === 'theme' && staticCommands.theme) {
-             handler = staticCommands.theme;
-        } else {
-            const outputContent = showError(cmd, context);
-            addOutput(outputContent);
-            return;
-        }
+        const outputContent = showError(cmd, context);
+        addOutput(outputContent);
+        return;
     }
 
 

@@ -13,12 +13,13 @@ import ShutdownScreen from './shutdown-screen';
 import PowerOnScreen from './power-on-screen';
 import { cn } from '@/lib/utils';
 import CommandOutput from './command-output';
+import { Directory, root } from '@/lib/filesystem';
 
 export type Output = {
   id: number;
   content: React.ReactNode;
   isCommand?: boolean;
-  command?: string;
+  promptText?: string;
 };
 
 type MatrixState = {
@@ -46,6 +47,9 @@ const Terminal = () => {
   const [isPoweringOn, setIsPoweringOn] = useState(false);
   const [matrix, setMatrix] = useState<MatrixState>({ active: false, color: '#0F0' });
   const [stopwatch, setStopwatch] = useState<StopwatchState>({ running: false, startTime: 0, elapsed: 0 });
+  const [currentDirectory, setCurrentDirectory] = useState<Directory>(root);
+  const [currentPath, setCurrentPath] = useState<string>('~');
+
 
   const terminalRef = useRef<HTMLDivElement>(null);
   const promptRef = useRef<PromptHandle>(null);
@@ -78,8 +82,8 @@ const Terminal = () => {
     oscillator.stop(audioCtx.currentTime + 0.1);
   }, [soundEnabled]);
 
-  const addOutput = useCallback((content: React.ReactNode, isCommand?: boolean, command?: string) => {
-    setOutputs(prev => [...prev, { id: Date.now() + Math.random(), content, isCommand, command }]);
+  const addOutput = useCallback((content: React.ReactNode, isCommand?: boolean, promptText?: string) => {
+    setOutputs(prev => [...prev, { id: Date.now() + Math.random(), content, isCommand, promptText }]);
   }, []);
 
   const showHeader = useCallback(() => {
@@ -108,12 +112,18 @@ const Terminal = () => {
     showHeader();
   };
   
+  const getPromptText = useCallback(() => {
+    return `${username}@${hostname}:${currentPath}$`;
+  }, [username, hostname, currentPath]);
+
+
   const runCommand = useCallback(async (command: string) => {
     const [cmdName, ...args] = command.trim().split(' ');
+    const promptText = getPromptText();
     
     setCommandInProgress(true);
     addToHistory(command);
-    addOutput(command, true, `${username}@${hostname}`);
+    addOutput(command, true, promptText);
     playSound('enter');
     
     const context = {
@@ -133,6 +143,10 @@ const Terminal = () => {
       typingSpeed,
       setMatrix,
       setStopwatch,
+      currentDirectory,
+      setCurrentDirectory,
+      currentPath,
+      setCurrentPath
     };
 
     await processCommand(cmdName, args, context);
@@ -142,7 +156,7 @@ const Terminal = () => {
     }
     
     setCommandInProgress(false);
-  }, [username, hostname, playSound, addOutput, typingSpeed, setTheme, setUsername, setSoundEnabled, setTypingSpeed, setHistory, showHeader]);
+  }, [username, hostname, playSound, addOutput, typingSpeed, setTheme, setUsername, setSoundEnabled, setTypingSpeed, setHistory, showHeader, currentDirectory, currentPath, getPromptText]);
   
   const addToHistory = (command: string) => {
     if (command.trim() === '') return;
@@ -237,7 +251,7 @@ const Terminal = () => {
               <div key={output.id} className="output-line mb-2">
                 {output.isCommand ? (
                   <div className="flex">
-                    <span className="text-accent">{output.command}:~$</span>
+                    <span className="text-accent">{output.promptText}</span>
                     <span className="flex-1 pl-2">{output.content}</span>
                   </div>
                 ) : (
@@ -249,7 +263,7 @@ const Terminal = () => {
             {!commandInProgress && (
               <Prompt
                   ref={promptRef}
-                  username={`${username}@${hostname}`}
+                  promptText={getPromptText()}
                   onSubmit={runCommand}
                   history={history}
                   disabled={stopwatch.running}

@@ -7,12 +7,13 @@ const commandDescriptions: Record<string, string> = {
   '?': 'Alias for help.',
   'help': 'Show available commands or details for a specific command. Usage: help [command]',
   'ayush': 'Opens my personal portfolio website in a new tab.',
-  'about': "Displays my biography, education, and skills.",
   'age': 'Calculate age from a given date. Usage: age YYYY-MM-DD',
   'ascii': 'Convert text to ASCII art. Usage: ascii [text] [font?]',
   'asciiqr': 'Generate an ASCII QR code from text. Usage: asciiqr [text]',
   'base64': 'Encode or decode text using Base64. Usage: base64 [encode|decode] [text]',
   'calendar': 'Display a calendar for the current month or a specified month/year. Usage: calendar [month year?]',
+  'cat': 'Display content of a file. Usage: cat [filename]',
+  'cd': 'Change directory. Usage: cd [directory]',
   'clear': 'Clear the terminal screen, history, or both. Usage: clear [screen|history|both]',
   'coin': 'Flip a virtual coin.',
   'commands': 'Show a detailed list of all commands with descriptions.',
@@ -30,10 +31,11 @@ const commandDescriptions: Record<string, string> = {
   'history': 'Show command history. Usage: history [count?]',
   'ip': 'Get information about an IP address. Usage: ip [address?]',
   'json': 'Fetch and pretty-print JSON from a URL. Usage: json [url]',
+  'ls': 'List files and directories. Usage: ls [-a]',
   'man': 'Display the manual page for a command. Usage: man [command]',
   'matrix': 'Toggle the matrix animation background.',
   'ping': 'Measure latency to a URL. Usage: ping [url]',
-  'projects': 'Display a list of my projects.',
+  'pwd': 'Print working directory.',
   'qr': 'Generate a QR code image from text. Usage: qr [text]',
   'remind': 'Set a reminder. Usage: remind [seconds] [message]',
   'reset': 'Reset terminal settings and reload.',
@@ -158,70 +160,8 @@ export const ayush = async () => {
     return 'Opening portfolio...';
 };
 
-export const about = async () => {
-  return (
-    <div className="space-y-4">
-      <div>
-        <p className="text-accent font-bold text-lg">Digital Identity</p>
-        <p>name: "Ayush Das"</p>
-        <p>headline: "Cybersecurity Enthusiast"</p>
-        <p>location: "Odisha, India"</p>
-        <p>shortBio: "I protect systems and data from cyber threats."</p>
-        <p className="mt-2 text-muted-foreground whitespace-pre-wrap">
-{`I’m Ayush Das, a passionate Cybersecurity Enthusiast and BCA student focused on mastering both Offensive and Defensive Security techniques. My journey in tech began with a deep curiosity for bug hunting, ethical hacking, and OSINT investigations, which gradually evolved into building real-world cybersecurity projects that blend code, creativity, and problem-solving. I thrive on challenges and am constantly seeking opportunities to learn and grow in the ever-evolving field of cybersecurity.`}
-        </p>
-      </div>
-
-      <div>
-        <p className="text-accent font-bold text-lg">Education</p>
-        <p>degree: "High school", school: "Navjyoti Vidyalaya", year: "2021", percentage: "84"</p>
-        <p>degree: "Higher secondary", school: "The Dronacharya School", year: "2023", percentage: "60"</p>
-        <p>degree: "Undergraduation", college: "YCAT", year: "2026", percentage: "8.4 sgpa"</p>
-      </div>
-      
-      <div>
-        <p className="text-accent font-bold text-lg">CERTIFICATES</p>
-        <ul className="list-disc list-inside">
-          <li>Cyber Job Simulation by Deloitte</li>
-          <li>ANZ Cyber Security Management</li>
-        </ul>
-      </div>
-
-       <div>
-        <p className="text-accent font-bold text-lg">COURSES</p>
-        <ul className="list-disc list-inside">
-          <li>Tata Cybersecurity Analyst Completion Certificate</li>
-          <li>Mastercard Cybersecurity Completion Certificate</li>
-        </ul>
-      </div>
-
-      <div>
-        <p className="text-accent font-bold text-lg">PROJECTS</p>
-        <ul className="list-disc list-inside space-y-2">
-          <li>
-            <p><span className="font-bold">Packet Sniffer based on Java:</span> Developed a network packet sniffer in Java to capture, analyze, and display real-time network traffic, aiding in network monitoring and security analysis.</p>
-          </li>
-          <li>
-            <p><span className="font-bold">Online Odisha eCommerce website:</span> Designed and developed an e-commerce platform focused on selling traditional and locally-made clothing in Odisha, supporting regional artisans and promoting traditional fashion through a user-friendly online store.</p>
-          </li>
-          <li>
-            <p><span className="font-bold">HTTP Server for Wireless File Transfer:</span> Built a lightweight HTTP server to enable remote file transfer over a network without cables, allowing seamless sharing between devices using only a web browser.</p>
-          </li>
-          <li>
-            <p><span className="font-bold">Image Encryption & Decryption Tool:</span> Created a secure tool to encrypt and decrypt images using custom algorithms, ensuring data privacy and protection during storage and transfer.</p>
-          </li>
-           <li>
-            <p><span className="font-bold">Global Health Expenditure Analysis using Power BI:</span> Analyzed global health spending trends using data visualization and statistical methods to highlight disparities and support policy insights.</p>
-          </li>
-        </ul>
-      </div>
-      
-      <div>
-        <p className="text-accent font-bold text-lg">Key Skills</p>
-        <p>Java, C, C++, Python, HTML, CSS, JS, React, PHP, Linux, AWS, Git/GitHub, API Development</p>
-      </div>
-    </div>
-  );
+export const about = async (args, context) => {
+    return context.runCommand('cat', ['about.md']);
 };
 
 
@@ -236,40 +176,8 @@ export const contact = async () => {
   );
 };
 
-export const projects = async () => {
-    return (
-        <div className="space-y-4">
-            <div>
-                <p>Here are the highlight of some my projects</p>
-                <p>you can find more on my github [<a href="https://github.com/aayush-xid-su" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su</a>]</p>
-            </div>
-            <ol className="list-decimal list-inside space-y-4">
-                <li className="space-y-2">
-                    <p><span className="font-bold">Packet Sniffer based on Java</span></p>
-                    <p>Developed a network packet sniffer in Java to capture, analyze, and display real-time network traffic, aiding in network monitoring and security analysis.</p>
-                </li>
-                <li className="space-y-2">
-                    <p><span className="font-bold">Online Odisha eCommerce website</span> [<a href="https://github.com/aayush-xid-su/ewebsite" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su/ewebsite</a>]</p>
-                    <p>Designed and developed an e-commerce platform focused on selling traditional and locally-made clothing in Odisha, supporting regional artisans and promoting traditional fashion through a user-friendly online store.</p>
-                </li>
-                <li className="space-y-2">
-                    <p><span className="font-bold">Chess based encryption–decryption</span> [<a href="https://github.com/aayush-xid-su/C4Crypt" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su/C4Crypt</a>]</p>
-                    <p>C4Crypt is a web-based encryption tool that converts text into chess move sequences using a custom cipher algorithm. Built with HTML, CSS, and JavaScript, it combines cryptography and creative logic to provide an interactive encryption–decryption experience.</p>
-                </li>
-                <li className="space-y-2">
-                    <p><span className="font-bold">Deck of card encryption–decryption</span> [<a href="https://github.com/aayush-xid-su/CardCrypt" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su/CardCrypt</a>]</p>
-                    <p>CardCrypt is a web-based encryption tool that encodes messages using a card-based cipher mechanism. it transforms plaintext into sequences or combinations influenced by card logic and supports decryption back into the original message.</p>
-                </li>
-                <li className="space-y-2">
-                    <p><span className="font-bold">HTTP Server for Wireless File Transfer</span> [<a href="https://github.com/aayush-xid-su/http-server" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su/http-server</a>]</p>
-                    <p>Built a lightweight HTTP server to enable remote file transfer over a network without cables, allowing seamlesssharing between devices using only a web browser.</p>
-                </li>
-            </ol>
-             <div>
-                <p>You can view more projects on my GITHUB <a href="https://github.com/aayush-xid-su/" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su/</a></p>
-            </div>
-        </div>
-    );
+export const projects = async (args, context) => {
+    return context.runCommand('cat', ['projects.md']);
 };
 
 export const social = async (args: string[]) => {
