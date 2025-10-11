@@ -57,15 +57,7 @@ const commandDescriptions: Record<string, string> = {
   'whoami': 'Display current user and system info.',
 };
 
-export const help = async (args: string[]) => {
-  if (args.length > 0) {
-    const command = args[0].toLowerCase();
-    if (commandDescriptions[command]) {
-      return `Usage: ${commandDescriptions[command]}`;
-    }
-    return `Command "${command}" not found.`;
-  }
-
+export const help = async () => {
   const allCommands = commandList.sort();
   const maxLength = Math.max(...allCommands.map(cmd => cmd.length)) + 2; // a little extra padding
   const numColumns = 4;
@@ -89,7 +81,7 @@ export const help = async (args: string[]) => {
   
   return (
     <div>
-      <pre>{output}</pre>
+      <pre className="whitespace-pre-wrap">{output}</pre>
       <p className="mt-2">Type 'help [command]' for more details on a specific command.</p>
       <p>Type 'commands' to see a list with descriptions.</p>
       <p>Type 'man [command]' to see a detailed manual for a command.</p>
@@ -131,9 +123,9 @@ export const man = async (args: string[]) => {
           <p className="font-bold text-accent">EXAMPLE</p>
           <div className="ml-4">
             <p>The following command:</p>
-            <pre className="p-2 my-1 bg-muted rounded font-mono text-sm">> {page.example.command}</pre>
+            <pre className="p-2 my-1 bg-muted rounded font-mono text-sm whitespace-pre-wrap">> {page.example.command}</pre>
             <p>Will produce the following output:</p>
-            <pre className="p-2 my-1 bg-muted rounded font-mono text-sm">{page.example.output}</pre>
+            <pre className="p-2 my-1 bg-muted rounded font-mono text-sm whitespace-pre-wrap">{page.example.output}</pre>
           </div>
         </div>
       )}
@@ -153,7 +145,7 @@ export const commands = async () => {
     return (
         <div>
             <p>Available commands:</p>
-            <pre className="mt-2">{commandDetails}</pre>
+            <pre className="mt-2 whitespace-pre-wrap">{commandDetails}</pre>
         </div>
     );
 };

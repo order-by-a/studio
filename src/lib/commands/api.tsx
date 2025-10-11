@@ -56,7 +56,7 @@ export const dns = async (args: string[]) => {
       output += `\nNo IPv6 (AAAA records) found for ${domain}.`;
     }
 
-    return output;
+    return <pre className="whitespace-pre-wrap">{output}</pre>;
 };
 export const dnslookup = dns;
 
@@ -102,7 +102,7 @@ export const ip = async (args: string[]) => {
     const ip = args[0];
     const data: any = await actions.getIpInfo(ip);
     if(data.error || data.status === 'fail') return data.error || `Could not get info for IP: ${ip}`;
-    return `IP Info for ${data.query}:\nCity: ${data.city}\nRegion: ${data.regionName}\nCountry: ${data.country}\nISP: ${data.isp}\nOrganization: ${data.org}`;
+    return <pre className="whitespace-pre-wrap">{`IP Info for ${data.query}:\nCity: ${data.city}\nRegion: ${data.regionName}\nCountry: ${data.country}\nISP: ${data.isp}\nOrganization: ${data.org}`}</pre>;
 };
 
 export const json = async (args: string[]) => {
@@ -111,7 +111,7 @@ export const json = async (args: string[]) => {
     const res = await actions.curlUrl(url);
     try {
         const parsed = JSON.parse(res);
-        return <pre>{JSON.stringify(parsed, null, 2)}</pre>
+        return <pre className="whitespace-pre-wrap">{JSON.stringify(parsed, null, 2)}</pre>
     } catch {
         return 'Error: Fetched content is not valid JSON.';
     }
@@ -162,9 +162,9 @@ export const weather = async (args: string[], context) => {
     const current = data.current_condition[0];
     const today = data.weather[0];
 
-    return `Weather for ${data.nearest_area[0].areaName[0].value}, ${data.nearest_area[0].country[0].value}:\n` +
+    return <pre className="whitespace-pre-wrap">{`Weather for ${data.nearest_area[0].areaName[0].value}, ${data.nearest_area[0].country[0].value}:\n` +
            `Currently: ${current.weatherDesc[0].value}, ${current.temp_C}°C (feels like ${current.FeelsLikeC}°C)\n` +
            `Wind: ${current.windspeedKmph} km/h from ${current.winddir16Point}\n` +
            `Humidity: ${current.humidity}%\n` +
-           `Today's forecast: ${today.hourly[4].weatherDesc[0].value}, high of ${today.maxtempC}°C, low of ${today.mintempC}°C`;
+           `Today's forecast: ${today.hourly[4].weatherDesc[0].value}, high of ${today.maxtempC}°C, low of ${today.mintempC}°C`}</pre>;
 };

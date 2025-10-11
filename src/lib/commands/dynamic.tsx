@@ -40,7 +40,7 @@ export const ascii = async (args: string[]) => {
                 resolve(data || '');
             });
         });
-        return <pre>{data}</pre>;
+        return <pre className="whitespace-pre-wrap">{data}</pre>;
     } catch(e: any) {
         return e.message;
     }
@@ -56,7 +56,7 @@ export const asciiqr = async (args: string[]) => {
                 resolve(url);
             });
         });
-        return <pre>{ascii}</pre>
+        return <pre className="whitespace-pre-wrap">{ascii}</pre>
     } catch (e) {
         return 'Error generating ASCII QR code.';
     }
@@ -135,7 +135,7 @@ export const calendar = async (args: string[]) => {
         if(day > daysInMonth) break;
     }
     
-    return <pre>{header + calendarGrid}</pre>;
+    return <pre className="whitespace-pre-wrap">{header + calendarGrid}</pre>;
 };
 
 export const clear = async (args: string[], { clearOutputs, clearHistory, showStartupMessages }) => {
@@ -193,7 +193,7 @@ export const history = async (args: string[], context) => {
     if (!historyStr) return 'No history found.';
     const history = JSON.parse(historyStr);
     const count = args[0] ? parseInt(args[0], 10) : 10;
-    return history.slice(0, count).reverse().join('\n');
+    return <pre className="whitespace-pre-wrap">{history.slice(0, count).reverse().join('\n')}</pre>;
 };
 
 export const matrix = async (args: string[], { setMatrix }) => {
@@ -446,6 +446,6 @@ export const whoami = async (args: string[], context) => {
         `Internet Provider: ${isp}`,
     ];
 
-    return info.join('\n');
+    return <pre className="whitespace-pre-wrap">{info.join('\n')}</pre>;
 };
     
