@@ -2,18 +2,20 @@ import React from 'react';
 import { CommandContext } from './index';
 import { Directory, FileSystemNode, findNode, getPath, root } from '@/lib/filesystem';
 
-const prankFolders = ['admin', 'bin', 'etc', 'root'];
+const prankFolders = ['admin', 'bin', 'etc', 'root', 'usr'];
+const homeDir = findNode('home/aayush') as Directory;
+
 
 export const cd = async (args: string[], { currentDirectory, setCurrentDirectory, setCurrentPath, currentPath, playSound, addOutput }: CommandContext) => {
     const path = args[0];
     if (!path || path === '~' || path === '~/') {
-        const homeDir = findNode('home/ayush') as Directory;
         setCurrentDirectory(homeDir);
-        setCurrentPath('~/home/aayush');
+        setCurrentPath('~/');
         return;
     }
     
-    if (prankFolders.includes(path.split('/')[0])) {
+    // Check if trying to access a prank folder from root
+    if (currentPath === '/' && prankFolders.includes(path.split('/')[0])) {
          playSound('error');
          addOutput(
              <div className="text-red-500">
@@ -25,35 +27,31 @@ export const cd = async (args: string[], { currentDirectory, setCurrentDirectory
     }
 
     if (path === '..') {
-         if (currentPath === '~') return;
-        
-        const pathParts = currentPath.replace(/^~\//, '').split('/');
-        pathParts.pop();
-
-        if (pathParts.length === 0) {
-            setCurrentDirectory(root);
-            setCurrentPath('~');
-            return;
-        }
-
-        const newPath = pathParts.join('/');
-        const newNode = findNode(newPath);
-
-        if (newNode && newNode.type === 'directory') {
-            setCurrentDirectory(newNode);
-            setCurrentPath(newPath.startsWith('home') ? `~/${newPath}` : newPath);
-        } else {
-            return `cd: no such file or directory: ${newPath}`;
+        if (currentDirectory.parent) {
+            setCurrentDirectory(currentDirectory.parent);
+            setCurrentPath(getPath(currentDirectory.parent));
         }
         return;
     }
     
-    const newPath = path.startsWith('~/') ? path.substring(2) : (currentPath === '~' ? path : `${currentPath.replace(/^~\//, '')}/${path}`);
-    const newNode = findNode(newPath);
+    const newPath = path.startsWith('/') ? path.substring(1) : (currentPath === '/' ? path : `${currentDirectory.name ? getPath(currentDirectory) + '/' : ''}${path}`);
+    const resolvedPath = path.startsWith('~/') ? `home/aayush/${path.substring(2)}` : newPath;
+
+    const newNode = findNode(resolvedPath, root);
     
     if (newNode && newNode.type === 'directory') {
+        if (prankFolders.includes(newNode.name) && newNode.parent === root) {
+             playSound('error');
+             addOutput(
+                 <div className="text-red-500">
+                     <p>YOU ARE NOT THE SUPER USER OR ADMIN OF THIS SITE</p>
+                     <p>YOU NEED SUDO PRIVILEGE TO ACCESS THESE THINGS</p>
+                 </div>
+             );
+             return;
+        }
         setCurrentDirectory(newNode);
-        setCurrentPath(newPath.startsWith('home') ? `~/${newPath}` : newPath);
+        setCurrentPath(getPath(newNode));
     } else {
         return `cd: no such file or directory: ${path}`;
     }
@@ -105,9 +103,7 @@ export const cat = async (args: string[], { currentDirectory }: CommandContext) 
 };
 
 export const pwd = async (args: string[], { currentPath }: CommandContext) => {
-    if (currentPath === '~') {
-        return '/';
-    }
-    const realPath = currentPath.replace('~/', '/home/ayush/');
-    return realPath;
+    if (currentPath === '~/') return '/home/aayush';
+    if (currentPath === '/') return '/';
+    return currentPath.replace(/^~\//, '/home/aayush/');
 };

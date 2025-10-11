@@ -1,10 +1,13 @@
 export type File = {
   type: 'file';
   content: string | (() => string | React.ReactNode);
+  name: string;
+  parent: Directory;
 };
 
 export type Directory = {
   type: 'directory';
+  name: string;
   parent: Directory | null;
   children: { [key: string]: Directory | File };
 };
@@ -93,82 +96,110 @@ Built a lightweight HTTP server for seamless remote file sharing.
 - Mastercard Cybersecurity
 `;
 
-
+// Define root and home first
 export const root: Directory = {
     type: 'directory',
+    name: '',
     parent: null,
-    children: {
-        home: {
-            type: 'directory',
-            parent: null, // Will be set dynamically
-            children: {
-                ayush: {
-                    type: 'directory',
-                    parent: null, // Will be set dynamically
-                    children: {
-                        'about.md': {
-                            type: 'file',
-                            content: aboutContent,
-                        },
-                        'projects.md': {
-                            type: 'file',
-                            content: projectsContent,
-                        },
-                        'resume.md': {
-                            type: 'file',
-                            content: resumeContent,
-                        },
-                    },
-                },
-            },
-        },
-        admin: { type: 'directory', parent: null, children: {} },
-        bin: { type: 'directory', parent: null, children: {} },
-        etc: { type: 'directory', parent: null, children: {} },
-        usr: { type: 'directory', parent: null, children: {} },
-        root: { type: 'directory', parent: null, children: {} }, // This is the /root folder, not the FS root
-    }
+    children: {},
 };
 
-// Set parent references
-(root.children.home as Directory).parent = root;
-const homeDir = root.children.home as Directory;
-(homeDir.children.ayush as Directory).parent = homeDir;
+const home: Directory = {
+    type: 'directory',
+    name: 'home',
+    parent: root,
+    children: {},
+};
+root.children['home'] = home;
 
-(root.children.admin as Directory).parent = root;
-(root.children.bin as Directory).parent = root;
-(root.children.etc as Directory).parent = root;
-(root.children.usr as Directory).parent = root;
-(root.children.root as Directory).parent = root;
+const ayush: Directory = {
+    type: 'directory',
+    name: 'aayush',
+    parent: home,
+    children: {},
+};
+home.children['aayush'] = ayush;
+
+// Define files and add them to ayush directory
+const aboutFile: File = {
+    type: 'file',
+    name: 'about.md',
+    parent: ayush,
+    content: aboutContent,
+};
+const projectsFile: File = {
+    type: 'file',
+    name: 'projects.md',
+    parent: ayush,
+    content: projectsContent,
+};
+const resumeFile: File = {
+    type: 'file',
+    name: 'resume.md',
+    parent: ayush,
+    content: resumeContent,
+};
+ayush.children['about.md'] = aboutFile;
+ayush.children['projects.md'] = projectsFile;
+ayush.children['resume.md'] = resumeFile;
+
+
+// Define prank folders and add them to root
+const prankFolders = ['admin', 'bin', 'etc', 'usr', 'root'];
+prankFolders.forEach(folderName => {
+    root.children[folderName] = {
+        type: 'directory',
+        name: folderName,
+        parent: root,
+        children: {},
+    };
+});
 
 
 // Function to find a node by path
 export const findNode = (path: string, startNode: Directory = root): FileSystemNode | undefined => {
-    const parts = path.split('/').filter(p => p && p !== '~');
+    const parts = path.split('/').filter(p => p && p !== '~' && p !== '.');
     let currentNode: Directory = startNode;
 
-    for (let i = 0; i < parts.length; i++) {
-        const part = parts[i];
+    for (const part of parts) {
+        if (part === '..') {
+            if (currentNode.parent) {
+                currentNode = currentNode.parent;
+            }
+            continue;
+        }
+        
         const nextNode = currentNode.children[part];
+
         if (!nextNode) {
             return undefined; // Not found
         }
+        
         if (nextNode.type === 'file') {
-            return i === parts.length - 1 ? nextNode : undefined;
+            // If it's a file, it must be the last part of the path
+            return parts.indexOf(part) === parts.length - 1 ? nextNode : undefined;
         }
+
         currentNode = nextNode;
     }
     return currentNode;
 };
 
-
 export const getPath = (node: Directory): string => {
-    if (node.parent === null) {
-      return '~';
+    if (node === findNode('home/aayush')) return '~/';
+    if (node === root) return '/';
+    
+    let path = '';
+    let current: Directory | null = node;
+    while (current && current.parent) {
+        path = `/${current.name}${path}`;
+        current = current.parent;
     }
-    const parentPath = getPath(node.parent);
-    const nodeName = Object.keys(node.parent.children).find(
-      key => node.parent!.children[key] === node
-    );
-    return parentPath === '~' ? `~/${nodeName}` : `${parentPath}/${nodeName}`;
+    
+    const homePath = '/home/aayush';
+    if (path.startsWith(homePath)) {
+        return `~${path.substring(homePath.length)}/` || '~/';
+    }
+
+    return path || '/';
 };

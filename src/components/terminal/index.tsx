@@ -51,7 +51,7 @@ const Terminal = () => {
   // Initialize to ~/aayush
   const initialDir = findNode('home/aayush') as Directory;
   const [currentDirectory, setCurrentDirectory] = useState<Directory>(initialDir);
-  const [currentPath, setCurrentPath] = useState<string>('~/home/aayush');
+  const [currentPath, setCurrentPath] = useState<string>('~/');
 
 
   const terminalRef = useRef<HTMLDivElement>(null);
@@ -116,8 +116,7 @@ const Terminal = () => {
   };
   
   const getPromptText = useCallback(() => {
-    const displayPath = currentPath.startsWith('~/home/ayush') ? currentPath.replace('~/home/ayush', '~/aayush') : currentPath;
-    return `${username}@${hostname}:${displayPath}$`;
+    return `${username}@${hostname}:${currentPath}$`;
 }, [username, hostname, currentPath]);
 
 
