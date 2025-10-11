@@ -36,58 +36,58 @@
   }
 
   .theme-blood {
-    --background-hsl: 0 100% 5%;
-    --foreground-hsl: 0 100% 50%;
-    --accent-hsl: 0 100% 40%;
-    --border-hsl: 0 100% 30%;
+    --background: 0 0% 0%;
+    --foreground: 0 100% 50%;
+    --accent: 0 100% 40%;
+    --border: 0 100% 30%;
   }
   
   .theme-dark {
-    --background-hsl: 0 0% 0%;
-    --foreground-hsl: 0 0% 100%;
-    --accent-hsl: 0 0% 50%;
-    --border-hsl: 0 0% 20%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --accent: 0 0% 50%;
+    --border: 0 0% 20%;
   }
 
   .theme-light {
-    --background-hsl: 0 0% 100%;
-    --foreground-hsl: 0 0% 0%;
-    --accent-hsl: 0 0% 20%;
-    --border-hsl: 0 0% 80%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --accent: 0 0% 20%;
+    --border: 0 0% 80%;
   }
 
   .theme-cosmic {
-    --background-hsl: 222 47% 7%;
-    --foreground-hsl: 212 100% 66%;
-    --accent-hsl: 265 79% 58%;
-    --border-hsl: 220 14% 13%;
+    --background: 222 47% 7%;
+    --foreground: 212 100% 66%;
+    --accent: 265 79% 58%;
+    --border: 220 14% 13%;
   }
   
   .theme-matrix {
-    --background-hsl: 0 0% 0%;
-    --foreground-hsl: 120 100% 50%;
-    --accent-hsl: 120 100% 33%;
-    --border-hsl: 120 100% 50%;
+    --background: 0 0% 0%;
+    --foreground: 120 100% 50%;
+    --accent: 120 100% 33%;
+    --border: 120 100% 50%;
   }
 
   :root,
   [class^="theme-"] {
-    --background: var(--background-hsl);
-    --foreground: var(--foreground-hsl);
-    --primary: var(--foreground-hsl);
-    --primary-foreground: var(--background-hsl);
-    --accent: var(--accent-hsl);
-    --border: var(--border-hsl);
-    --input: var(--border-hsl);
-    --ring: var(--accent-hsl);
-    --card: var(--background-hsl);
-    --card-foreground: var(--foreground-hsl);
-    --popover: var(--background-hsl);
-    --popover-foreground: var(--foreground-hsl);
-    --secondary: hsl(var(--accent-hsl) / 0.2);
-    --secondary-foreground: var(--foreground-hsl);
-    --muted: hsl(var(--accent-hsl) / 0.2);
-    --muted-foreground: hsl(var(--foreground-hsl) / 0.7);
+    --background: hsl(var(--background));
+    --foreground: hsl(var(--foreground));
+    --primary: hsl(var(--foreground));
+    --primary-foreground: hsl(var(--background));
+    --accent: hsl(var(--accent));
+    --border: hsl(var(--border));
+    --input: hsl(var(--border));
+    --ring: hsl(var(--accent));
+    --card: hsl(var(--background));
+    --card-foreground: hsl(var(--foreground));
+    --popover: hsl(var(--background));
+    --popover-foreground: hsl(var(--foreground));
+    --secondary: hsl(var(--accent) / 0.2);
+    --secondary-foreground: hsl(var(--foreground));
+    --muted: hsl(var(--accent) / 0.2);
+    --muted-foreground: hsl(var(--foreground) / 0.7);
     color-scheme: dark;
   }
 
@@ -115,11 +115,12 @@
 
 .cursor-blink {
   animation: blink 1s step-end infinite;
-  background-color: #0F0;
+  background-color: hsl(var(--foreground));
   display: inline-block;
-  width: 0.6rem;
-  height: 1.2em;
-  box-shadow: 0 0 2px #0F0;
+  width: 0.6em; /* Width relative to font size */
+  height: 1.2em;  /* Height relative to font size */
+  margin-left: 1px;
+  box-shadow: 0 0 3px hsl(var(--foreground));
 }
 
 
