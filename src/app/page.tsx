@@ -7,8 +7,8 @@ import { useEffect, useState } from 'react';
 const BOOT_CHOICE_KEY = 'boot_choice';
 
 export default function Home() {
-  const [isClient, setIsClient] = useState(false);
   const [showTerminal, setShowTerminal] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -24,7 +24,7 @@ export default function Home() {
   };
   
   if (!isClient) {
-    return null; // Don't render anything on the server to avoid hydration errors.
+    return null; // Render nothing on the server to prevent hydration mismatch.
   }
 
   return (
