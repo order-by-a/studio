@@ -1,3 +1,4 @@
+
 'use client';
 import { getWeatherInfo } from 'app/actions';
 import { Maximize, Sun } from 'lucide-react';
