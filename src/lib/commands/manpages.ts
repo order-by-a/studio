@@ -49,15 +49,13 @@ DESCRIPTION
     },
     set: {
         name: 'set',
-        description: 'Change terminal settings.',
-        longDescription: `Allows customization of terminal settings. You can change the visual theme, the displayed username, toggle sound effects, and adjust the typewriter speed.
-        
-Available settings:
-- theme: Sets the color scheme.
-- username: Sets the name displayed in the prompt.
-- sound: Turns sound 'on' or 'off'.
-- speed: Sets the typing animation speed in milliseconds per character (0 for instant).`,
-        usage: 'set <setting> <value>',
+        description: 'Configure terminal options.',
+        longDescription: `Allows customization of terminal settings.
+- 'set theme [theme-name]' to change the theme. Without a name, it lists available themes.
+- 'set username <name>' to change the displayed username.
+- 'set sound <on|off>' to toggle sound effects.
+- 'set speed <ms>' to adjust the typing animation speed.`,
+        usage: 'set <option> [value]',
         example: {
             command: 'set theme blood',
             output: 'Theme set to blood.',

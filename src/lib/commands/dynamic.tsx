@@ -297,21 +297,35 @@ export const rps = async (args: string[]) => {
 
 
 export const set = async (args: string[], { setTheme, setUsername, setSoundEnabled, setTypingSpeed }) => {
-    if (args.length < 2) return `Usage: set [theme|username|sound|speed] [value].\nAvailable themes: ${themes.join(', ')}\nSound options: on, off\nSpeed is in ms per character.`;
     const [key, ...valueParts] = args;
     const value = valueParts.join(' ');
 
+    if (!key) {
+        return `Usage:
+set <theme|username|sound|speed> [value]
+set theme - list available themes
+set theme <theme_name> - change the terminal theme
+set username <name> - set a new username
+set sound <on|off> - toggle sound effects
+set speed <ms> - set typing speed in milliseconds`;
+    }
+
     switch (key) {
         case 'theme':
+            if (!value) {
+                return `Available themes: ${themes.join(', ')}`;
+            }
             if (isTheme(value)) {
                 setTheme(value);
                 return `Theme set to ${value}.`;
             }
             return `Invalid theme. Available: ${themes.join(', ')}`;
         case 'username':
+            if (!value) return 'Usage: set username <name>';
             setUsername(value);
             return `Username set to ${value}.`;
         case 'sound':
+             if (!value) return 'Usage: set sound <on|off>';
             if (value === 'on') {
                 setSoundEnabled(true);
                 return 'Sound enabled.';
@@ -321,6 +335,7 @@ export const set = async (args: string[], { setTheme, setUsername, setSoundEnabl
             }
             return 'Invalid sound option. Use "on" or "off".';
         case 'speed':
+            if (!value) return 'Usage: set speed <ms>';
             const speed = parseInt(value, 10);
             if (!isNaN(speed) && speed >= 0) {
                 setTypingSpeed(speed);
@@ -328,7 +343,7 @@ export const set = async (args: string[], { setTheme, setUsername, setSoundEnabl
             }
             return 'Invalid speed. Please provide a non-negative number.';
         default:
-            return 'Invalid setting. Use "theme", "username", "sound", or "speed".';
+            return `Invalid setting: '${key}'. Use 'theme', 'username', 'sound', or 'speed'.`;
     }
 };
 
@@ -511,3 +526,4 @@ export const whoami = async (args: string[], context) => {
     return info.join('\n');
 };
     
+

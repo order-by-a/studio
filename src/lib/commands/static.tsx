@@ -45,7 +45,7 @@ const commandDescriptions: Record<string, string> = {
   'reset': 'Reset terminal settings and reload.',
   'reverse': 'Reverse a string. Usage: reverse [text]',
   'rps': 'Play Rock, Paper, Scissors. Usage: rps [rock|paper|scissors]',
-  'set': 'Change terminal settings. Usage: set [theme|username|sound|speed] [value]',
+  'set': 'Configure terminal options. Usage: set <option> [value]',
   'shorten': 'Shorten a URL using TinyURL. Usage: shorten [url]',
   'shutdown': 'Shuts down the terminal interface.',
   'social': 'Display links to my social media profiles.',
