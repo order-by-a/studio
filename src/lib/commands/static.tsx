@@ -269,9 +269,11 @@ export const projects = async () => {
 
 export const social = async (args: string[]) => {
     const socialLinks: Record<string, string> = {
-        'twitter': 'https://twitter.com/ash_singh_xda',
-        'linkedin': 'https://linkedin.com/in/ayush-singh-629007170',
-        'github': 'https://github.com/ayushs-2k1',
+        'linkedin': 'https://linkedin.com/in/ayushdas-11am',
+        'github': 'https://github.com/aayush-xid-su',
+        'instagram': 'https://instagram.com/aayush_xid_su',
+        'twitter': 'https://x.com/aayushxidsu',
+        'codepen': 'https://codepen.io/aayush_xid_su',
     };
     if(args.length > 0){
         const platform = args[0].toLowerCase();
@@ -286,6 +288,7 @@ export const social = async (args: string[]) => {
 
     return (
         <div>
+            <p>Here are my Social media:</p>
             {Object.entries(socialLinks).map(([platform, link]) => (
                  <p key={platform}>- {platform}: <a href={link} target="_blank" rel="noopener noreferrer" className="text-accent underline">{link}</a></p>
             ))}
