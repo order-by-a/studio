@@ -89,13 +89,10 @@ export const calendar = async (args: string[]) => {
         const dateString = args.join(' ');
         const parsedDate = new Date(dateString);
         
-        if (!isNaN(parsedDate.getTime())) {
-            if (/^\d{4}$/.test(dateString.trim())) {
-                 return 'Invalid format. Usage: calendar [month year] (e.g., "september 2025") or leave blank.';
-            }
+        if (!isNaN(parsedDate.getTime()) && dateString.trim().split(' ').length > 1) {
             targetDate = parsedDate;
         } else {
-            return `Invalid date format: "${dateString}". Try "september 2025" or leave blank for current month.`;
+             return `Invalid date format: "${dateString}". Try "september 2025" or leave blank for current month.`;
         }
     }
 
@@ -111,6 +108,12 @@ export const calendar = async (args: string[]) => {
     let calendarGrid = '';
     let day = 1;
 
+    // ANSI escape code for highlighting
+    const highlightStart = `\x1b[7m`;
+    const highlightEnd = `\x1b[0m`;
+
+    const isCurrentMonthAndYear = month === now.getMonth() && year === now.getFullYear();
+
     for(let i=0; i<6; i++){
         let row = '';
         for(let j=0; j<7; j++){
@@ -120,8 +123,8 @@ export const calendar = async (args: string[]) => {
                 break;
             } else {
                 let dayStr = day.toString().padStart(2, ' ');
-                if (day === now.getDate() && month === now.getMonth() && year === now.getFullYear()) {
-                     row += `\x1b[7m${dayStr}\x1b[0m `;
+                if (isCurrentMonthAndYear && day === now.getDate()) {
+                     row += `${highlightStart}${dayStr}${highlightEnd} `;
                 } else {
                     row += `${dayStr} `;
                 }

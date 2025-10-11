@@ -31,14 +31,18 @@ export const country = async (args: string[]) => {
   return `Country: ${data.name.common}\nCapital: ${data.capital?.[0]}\nPopulation: ${data.population.toLocaleString()}\nRegion: ${data.region}\nCurrencies: ${currencyInfo}`;
 };
 
-export const curl = async (args: string[], context) => {
-  if (!args.length) return 'Usage: curl [url]';
+export const curl = (args: string[], context) => {
+  if (!args.length) {
+    context.addOutput('Usage: curl [url]');
+    return;
+  }
   let url = args[0];
   if (!/^https?:\/\//i.test(url)) {
     url = 'https://' + url;
   }
-  const content = await actions.curlUrl(url);
-  context.addOutput(<pre className="whitespace-pre-wrap">{content}</pre>);
+  actions.curlUrl(url).then(content => {
+    context.addOutput(<pre className="whitespace-pre-wrap">{content}</pre>);
+  });
 };
 
 export const define = async (args: string[]) => {
@@ -211,8 +215,4 @@ export const weather = async (args: string[], context) => {
            `Wind: ${current.windspeedKmph} km/h from ${current.winddir16Point}\n` +
            `Humidity: ${current.humidity}%\n` +
            `Today's forecast: ${today.hourly[4].weatherDesc[0].value}, high of ${today.maxtempC}°C, low of ${today.mintempC}°C`;
-};
-
-export const sysinfo = async (args: string[], context) => {
-    return dynamicCmds.whoami(args, context);
 };

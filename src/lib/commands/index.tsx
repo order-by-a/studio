@@ -2,6 +2,7 @@ import React from 'react';
 import { staticCommands } from './static';
 import * as apiCmds from './api';
 import * as dynamicCmds from './dynamic';
+import { sysinfo } from './sysinfo';
 
 type MatrixState = {
     active: boolean;
@@ -38,6 +39,7 @@ const commands: Record<string, CommandHandler> = {
     ...staticCommands,
     ...apiCmds,
     ...dynamicCmds,
+    sysinfo,
 };
 
 export const commandList = Object.keys(commands).filter(c => c !== '?'); // Exclude alias from the main list

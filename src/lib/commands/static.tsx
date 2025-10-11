@@ -14,7 +14,7 @@ const commandDescriptions: Record<string, string> = {
   'ascii': 'Convert text to ASCII art. Usage: ascii [text] [font?]',
   'asciiqr': 'Generate an ASCII QR code from text. Usage: asciiqr [text]',
   'base64': 'Encode or decode text using Base64. Usage: base64 [encode|decode] [text]',
-  'calendar': 'Display a calendar for the current month or a specified month/year. Usage: calendar [MM/YYYY?]',
+  'calendar': 'Display a calendar for the current month or a specified month/year. Usage: calendar [month year?]',
   'capitalize': 'Capitalize the first letter of each word in a text. Usage: capitalize [text]',
   'clear': 'Clear the terminal screen, history, or both. Usage: clear [screen|history|both]',
   'coin': 'Flip a virtual coin.',
@@ -53,7 +53,7 @@ const commandDescriptions: Record<string, string> = {
   'stock': 'Get stock quote information. Usage: stock [ticker]',
   'stopwatch': 'A simple stopwatch. Usage: stopwatch [start|stop|reset]',
   'synonym': 'Find synonyms for a word. Usage: synonym [word]',
-  'sysinfo': 'Alias for whoami.',
+  'sysinfo': 'Displays detailed system and IP information.',
   'theme': 'List all available themes.',
   'time': 'Display the current time or time in a specific timezone. Usage: time [timezone?]',
   'timer': 'Set a countdown timer. Usage: timer [seconds|hh:mm:ss]',
@@ -257,23 +257,23 @@ export const projects = async () => {
                 <p>you can find more on my github [<a href="https://github.com/aayush-xid-su" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su</a>]</p>
             </div>
             <ol className="list-decimal list-inside space-y-4">
-                <li>
+                <li className="space-y-2">
                     <p><span className="font-bold">Packet Sniffer based on Java</span></p>
                     <p>Developed a network packet sniffer in Java to capture, analyze, and display real-time network traffic, aiding in network monitoring and security analysis.</p>
                 </li>
-                <li>
+                <li className="space-y-2">
                     <p><span className="font-bold">Online Odisha eCommerce website</span> [<a href="https://github.com/aayush-xid-su/ewebsite" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su/ewebsite</a>]</p>
                     <p>Designed and developed an e-commerce platform focused on selling traditional and locally-made clothing in Odisha, supporting regional artisans and promoting traditional fashion through a user-friendly online store.</p>
                 </li>
-                <li>
+                <li className="space-y-2">
                     <p><span className="font-bold">Chess based encryption–decryption</span> [<a href="https://github.com/aayush-xid-su/C4Crypt" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su/C4Crypt</a>]</p>
                     <p>C4Crypt is a web-based encryption tool that converts text into chess move sequences using a custom cipher algorithm. Built with HTML, CSS, and JavaScript, it combines cryptography and creative logic to provide an interactive encryption–decryption experience.</p>
                 </li>
-                <li>
+                <li className="space-y-2">
                     <p><span className="font-bold">Deck of card encryption–decryption</span> [<a href="https://github.com/aayush-xid-su/CardCrypt" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su/CardCrypt</a>]</p>
                     <p>CardCrypt is a web-based encryption tool that encodes messages using a card-based cipher mechanism. it transforms plaintext into sequences or combinations influenced by card logic and supports decryption back into the original message.</p>
                 </li>
-                <li>
+                <li className="space-y-2">
                     <p><span className="font-bold">HTTP Server for Wireless File Transfer</span> [<a href="https://github.com/aayush-xid-su/http-server" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://github.com/aayush-xid-su/http-server</a>]</p>
                     <p>Built a lightweight HTTP server to enable remote file transfer over a network without cables, allowing seamlesssharing between devices using only a web browser.</p>
                 </li>
