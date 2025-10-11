@@ -44,25 +44,26 @@ const aboutContent = `
 `;
 
 const projectsContent = `
-Here are the highlights of some of my projects. You can find more on my GitHub.
+Projects :
+Here are the highlight of some my projects
+you can find more on my github [ https://github.com/aayush-xid-su ]
 
-**Packet Sniffer based on Java**
-Developed a network packet sniffer in Java to capture, analyze, and display real-time network traffic, aiding in network monitoring and security analysis.
+1. Packet Sniffer based on Java 
+   Developed a network packet sniffer in Java to capture, analyze, and display real-time network traffic, aiding in network monitoring and security analysis.
 
-**Online Odisha eCommerce website**
-Designed and developed an e-commerce platform focused on selling traditional and locally-made clothing in Odisha, supporting regional artisans and promoting traditional fashion through a user-friendly online store.
+2. Online Odisha eCommerce website [ https://github.com/aayush-xid-su/ewebsite ]
+   Designed and developed an e-commerce platform focused on selling traditional and locally-made clothing in Odisha, supporting regional artisans and promoting traditional fashion through a user-friendly online store.
 
-**HTTP Server for Wireless File Transfer**
-Built a lightweight HTTP server to enable remote file transfer over a network without cables, allowing seamless sharing between devices using only a web browser.
+3. Chess based encryption–decryption [ https://github.com/aayush-xid-su/C4Crypt ]
+   C4Crypt is a web-based encryption tool that converts text into chess move sequences using a custom cipher algorithm. Built with HTML, CSS, and JavaScript, it combines cryptography and creative logic to provide an interactive encryption–decryption experience.
 
-**Image Encryption & Decryption Tool**
-Created a secure tool to encrypt and decrypt images using custom algorithms, ensuring data privacy and protection during storage and transfer.
+4. Deck of card encryption–decryption [ https://github.com/aayush-xid-su/CardCrypt ]
+   CardCrypt is a web-based encryption tool that encodes messages using a card-based cipher mechanism. it transforms plaintext into sequences or combinations influenced by card logic and supports decryption back into the original message.
 
-**Global Health Expenditure Analysis using Power BI**
-Analyzed global health spending trends using data visualization and statistical methods to highlight disparities and support policy insights.
+5. HTTP Server for Wireless File Transfer [ https://github.com/aayush-xid-su/http-server ]
+   Built a lightweight HTTP server to enable remote file transfer over a network without cables, allowing seamlesssharing between devices using only a web browser.
 
----
-You can view more projects on my GitHub profile: https://github.com/aayush-xid-su
+You can view more projects on my GITHUB https://github.com/aayush-xid-su/
 `;
 
 const resumeContent = `
