@@ -55,7 +55,7 @@ const BootMenu = ({ onSelectItGuy }: BootMenuProps) => {
             )}
           >
             <ChevronRight size={20} className={cn('transition-opacity', selected === 'it-guy' ? 'opacity-100' : 'opacity-0')} />
-            <span className={cn(selected === 'it-guy' ? 'animate-blink' : 'opacity-0')}>_</span>
+            <span className={cn(selected === 'it-guy' ? 'cursor-blink' : 'opacity-0')}>_</span>
              IT Guy
           </button>
           <button
