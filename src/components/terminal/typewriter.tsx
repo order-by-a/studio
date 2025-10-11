@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useMemo } from 'react';
+import { cn } from '@/lib/utils';
 
 type TypewriterProps = {
   text: string;
@@ -20,8 +21,6 @@ const Typewriter = ({ text, speed = 50, className, as: Component = 'div', onFini
   useEffect(() => {
     onFinishedRef.current = onFinished;
   }, [onFinished]);
-
-  const isMultiLine = useMemo(() => text.includes('\n'), [text]);
 
   useEffect(() => {
     setDisplayedText('');
@@ -53,10 +52,10 @@ const Typewriter = ({ text, speed = 50, className, as: Component = 'div', onFini
     }
   }, [isFinished]);
 
-  const containerStyle = isMultiLine ? { whiteSpace: 'pre-wrap' as 'pre-wrap' } : {};
+  const containerStyle = { whiteSpace: 'pre-wrap' as 'pre-wrap' };
 
   return (
-    <Component className={className} style={containerStyle}>
+    <Component className={cn("whitespace-pre-wrap", className)} style={containerStyle}>
       {displayedText}
       {!isFinished && <span className="cursor-blink bg-foreground w-2 h-[1.2em] inline-block ml-1 align-middle"></span>}
     </Component>
