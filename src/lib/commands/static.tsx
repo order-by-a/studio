@@ -239,9 +239,9 @@ export const contact = async () => {
   return (
     <div>
       <p>You can reach me via:</p>
-      <p>- Email: <a href="mailto:ayush.singh.xda@gmail.com" className="text-accent underline">ayush.singh.xda@gmail.com</a></p>
-      <p>- LinkedIn: <a href="https://linkedin.com/in/ayush-singh-629007170" target="_blank" rel="noopener noreferrer" className="text-accent underline">linkedin.com/in/ayush-singh-629007170</a></p>
-      <p>- GitHub: <a href="https://github.com/ayushs-2k1" target="_blank" rel="noopener noreferrer" className="text-accent underline">github.com/ayushs-2k1</a></p>
+      <p>- Email: <a href="mailto:aayushxidsu.11am@gmail.com" className="text-accent underline">aayushxidsu.11am@gmail.com</a></p>
+      <p>- Mobile: +91 7894038559</p>
+      <p>- LinkedIn: <a href="https://linkedin.com/in/ayushdas-11am" target="_blank" rel="noopener noreferrer" className="text-accent underline">https://linkedin.com/in/ayushdas-11am</a></p>
     </div>
   );
 };
