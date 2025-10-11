@@ -98,24 +98,53 @@ export const root: Directory = {
     type: 'directory',
     parent: null,
     children: {
-        'about.md': {
-            type: 'file',
-            content: aboutContent,
+        home: {
+            type: 'directory',
+            parent: null, // Will be set dynamically
+            children: {
+                ayush: {
+                    type: 'directory',
+                    parent: null, // Will be set dynamically
+                    children: {
+                        'about.md': {
+                            type: 'file',
+                            content: aboutContent,
+                        },
+                        'projects.md': {
+                            type: 'file',
+                            content: projectsContent,
+                        },
+                        'resume.md': {
+                            type: 'file',
+                            content: resumeContent,
+                        },
+                    },
+                },
+            },
         },
-        'projects.md': {
-            type: 'file',
-            content: projectsContent,
-        },
-        'resume.md': {
-            type: 'file',
-            content: resumeContent,
-        },
+        admin: { type: 'directory', parent: null, children: {} },
+        bin: { type: 'directory', parent: null, children: {} },
+        etc: { type: 'directory', parent: null, children: {} },
+        usr: { type: 'directory', parent: null, children: {} },
+        root: { type: 'directory', parent: null, children: {} }, // This is the /root folder, not the FS root
     }
 };
 
+// Set parent references
+(root.children.home as Directory).parent = root;
+const homeDir = root.children.home as Directory;
+(homeDir.children.ayush as Directory).parent = homeDir;
+
+(root.children.admin as Directory).parent = root;
+(root.children.bin as Directory).parent = root;
+(root.children.etc as Directory).parent = root;
+(root.children.usr as Directory).parent = root;
+(root.children.root as Directory).parent = root;
+
+
 // Function to find a node by path
 export const findNode = (path: string, startNode: Directory = root): FileSystemNode | undefined => {
-    const parts = path.split('/').filter(p => p);
+    const parts = path.split('/').filter(p => p && p !== '~');
     let currentNode: Directory = startNode;
 
     for (let i = 0; i < parts.length; i++) {

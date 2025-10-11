@@ -92,6 +92,17 @@ export const help = async (args: string[]) => {
       <p className="mt-2">Type 'help [command]' for more details on a specific command.</p>
       <p>Type 'commands' to see a list with descriptions.</p>
       <p>Type 'man [command]' to see a detailed manual for a command.</p>
+      <div className="mt-2">
+        <p>Available folders:</p>
+        <div className="grid grid-cols-4 gap-x-2 text-blue-400">
+            <span>aayush/</span>
+            <span>admin/</span>
+            <span>bin/</span>
+            <span>etc/</span>
+            <span>root/</span>
+            <span>usr/</span>
+        </div>
+      </div>
     </div>
   );
 };
@@ -160,7 +171,7 @@ export const ayush = async () => {
     return 'Opening portfolio...';
 };
 
-export const about = async (args, context) => {
+export const about = async (args: string[], context: any) => {
     return context.runCommand('cat', ['about.md']);
 };
 
@@ -176,7 +187,7 @@ export const contact = async () => {
   );
 };
 
-export const projects = async (args, context) => {
+export const projects = async (args: string[], context: any) => {
     return context.runCommand('cat', ['projects.md']);
 };
 
@@ -209,7 +220,7 @@ export const social = async (args: string[]) => {
     )
 };
 
-export const theme = async (args: string[], { setTheme }) => {
+export const theme = async (args: string[], { setTheme }: any) => {
     if (args.length > 0) {
         const selectedTheme = args[0];
         if (isTheme(selectedTheme)) {

@@ -13,7 +13,7 @@ import ShutdownScreen from './shutdown-screen';
 import PowerOnScreen from './power-on-screen';
 import { cn } from '@/lib/utils';
 import CommandOutput from './command-output';
-import { Directory, root } from '@/lib/filesystem';
+import { Directory, findNode } from '@/lib/filesystem';
 
 export type Output = {
   id: number;
@@ -47,8 +47,11 @@ const Terminal = () => {
   const [isPoweringOn, setIsPoweringOn] = useState(false);
   const [matrix, setMatrix] = useState<MatrixState>({ active: false, color: '#0F0' });
   const [stopwatch, setStopwatch] = useState<StopwatchState>({ running: false, startTime: 0, elapsed: 0 });
-  const [currentDirectory, setCurrentDirectory] = useState<Directory>(root);
-  const [currentPath, setCurrentPath] = useState<string>('~');
+  
+  // Initialize to ~/aayush
+  const initialDir = findNode('home/aayush') as Directory;
+  const [currentDirectory, setCurrentDirectory] = useState<Directory>(initialDir);
+  const [currentPath, setCurrentPath] = useState<string>('~/home/aayush');
 
 
   const terminalRef = useRef<HTMLDivElement>(null);
@@ -113,8 +116,9 @@ const Terminal = () => {
   };
   
   const getPromptText = useCallback(() => {
-    return `${username}@${hostname}:${currentPath}$`;
-  }, [username, hostname, currentPath]);
+    const displayPath = currentPath.startsWith('~/home/ayush') ? currentPath.replace('~/home/ayush', '~/aayush') : currentPath;
+    return `${username}@${hostname}:${displayPath}$`;
+}, [username, hostname, currentPath]);
 
 
   const runCommand = useCallback(async (command: string) => {
@@ -156,7 +160,7 @@ const Terminal = () => {
     }
     
     setCommandInProgress(false);
-  }, [username, hostname, playSound, addOutput, typingSpeed, setTheme, setUsername, setSoundEnabled, setTypingSpeed, setHistory, showHeader, currentDirectory, currentPath, getPromptText]);
+  }, [username, playSound, addOutput, typingSpeed, setTheme, setUsername, setSoundEnabled, setTypingSpeed, setHistory, showHeader, currentDirectory, currentPath, getPromptText]);
   
   const addToHistory = (command: string) => {
     if (command.trim() === '') return;
