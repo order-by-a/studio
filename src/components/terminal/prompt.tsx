@@ -94,6 +94,7 @@ const Prompt = forwardRef<PromptHandle, PromptProps>(({ username, onSubmit, hist
     if (e.key === 'Enter') {
       e.preventDefault();
       let commandToSubmit = input;
+      // Use the full suggestion if tab hasn't been pressed but there's a suggestion.
       if (suggestion && input.trim() !== '') {
         commandToSubmit = suggestion;
       }
