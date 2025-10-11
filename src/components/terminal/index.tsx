@@ -36,7 +36,7 @@ type StopwatchState = {
 const Terminal = () => {
   const [username, setUsername] = useLocalStorage('terminal-username', 'visitor');
   const [hostname, setHostname] = useLocalStorage('terminal-hostname', 'aayush-xid-su');
-  const [theme, setTheme] = useLocalStorage<Theme>('terminal-theme', 'hacker');
+  const [theme, setTheme] = useLocalStorage<Theme>('terminal-theme', 'matrix');
   const [soundEnabled, setSoundEnabled] = useLocalStorage('terminal-sound', true);
   const [typingSpeed, setTypingSpeed] = useLocalStorage('terminal-speed', 20);
   const [history, setHistory] = useLocalStorage<string[]>('terminal-history', []);
@@ -252,7 +252,7 @@ const Terminal = () => {
               <div key={output.id} className="output-line mb-2">
                 {output.isCommand ? (
                   <div className="flex">
-                    <span className="text-accent">{output.promptText}</span>
+                    <span className="text-green-500">{output.promptText}</span>
                     <span className="flex-1 pl-2">{output.content}</span>
                   </div>
                 ) : (
