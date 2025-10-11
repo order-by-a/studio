@@ -153,7 +153,7 @@ export const commands = async () => {
 
 export const ayush = async () => {
     if (typeof window !== 'undefined') {
-        window.open('https://ayushsingh.net', '_blank');
+        window.open('https://ayush11profile.netlify.app/', '_blank');
     }
     return 'Opening portfolio...';
 };
