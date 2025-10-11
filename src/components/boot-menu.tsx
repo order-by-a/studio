@@ -22,7 +22,8 @@ const BootMenu = ({ onSelectItGuy }: BootMenuProps) => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft' || e.key === 'Tab') {
+        e.preventDefault();
         setSelected(prev => (prev === 'it-guy' ? 'normal-user' : 'it-guy'));
       } else if (e.key === 'Enter') {
         handleSelection();
@@ -37,8 +38,8 @@ const BootMenu = ({ onSelectItGuy }: BootMenuProps) => {
   }, [selected]);
 
   return (
-    <div className="fixed inset-0 bg-black text-green-500 font-mono flex flex-col items-center justify-center p-4">
-      <div className="border border-green-500 rounded-lg p-8 w-full max-w-md space-y-6">
+    <div className="fixed inset-0 bg-black text-primary font-mono flex flex-col items-center justify-center p-4">
+      <div className="border border-primary rounded-lg p-8 w-full max-w-lg space-y-6">
         <h1 className="text-2xl">Boot Menu</h1>
         <p>Select your profile to continue:</p>
         <div className="flex items-center justify-center space-x-4">
@@ -49,12 +50,12 @@ const BootMenu = ({ onSelectItGuy }: BootMenuProps) => {
             }}
             onMouseEnter={() => setSelected('it-guy')}
             className={cn(
-              'border border-green-500 rounded px-6 py-3 flex items-center gap-2 transition-colors duration-200',
-              selected === 'it-guy' ? 'bg-green-500 text-black' : 'hover:bg-green-500/20'
+              'border border-primary rounded px-6 py-3 flex items-center gap-2 transition-colors duration-200',
+              selected === 'it-guy' ? 'bg-primary text-primary-foreground' : 'hover:bg-primary/20'
             )}
           >
-            <ChevronRight size={20} className={cn(selected === 'it-guy' ? 'opacity-100' : 'opacity-0')} />
-            <span className={cn(selected === 'it-guy' ? 'animate-blink' : '')}>_</span>
+            <ChevronRight size={20} className={cn('transition-opacity', selected === 'it-guy' ? 'opacity-100' : 'opacity-0')} />
+            <span className={cn(selected === 'it-guy' ? 'animate-blink' : 'opacity-0')}>_</span>
              IT Guy
           </button>
           <button
@@ -64,10 +65,11 @@ const BootMenu = ({ onSelectItGuy }: BootMenuProps) => {
             }}
             onMouseEnter={() => setSelected('normal-user')}
             className={cn(
-              'border border-green-500 rounded px-6 py-3 flex items-center gap-2 transition-colors duration-200',
-               selected === 'normal-user' ? 'bg-green-500 text-black' : 'hover:bg-green-500/20'
+              'border border-primary rounded px-6 py-3 flex items-center gap-2 transition-colors duration-200',
+               selected === 'normal-user' ? 'bg-primary text-primary-foreground' : 'hover:bg-primary/20'
             )}
           >
+             <ChevronRight size={20} className={cn('transition-opacity', selected === 'normal-user' ? 'opacity-100' : 'opacity-0')} />
             <User size={20} />
             Normal User
           </button>
