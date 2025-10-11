@@ -1,6 +1,5 @@
 import React from 'react';
 import * as actions from '@/app/actions';
-import { getDictionaryInfo } from '@/app/actions';
 
 export const country = async (args: string[]) => {
   let name = args.join(' ');
@@ -73,9 +72,31 @@ export const geo = async (args: string[]) => {
 export const github = async (args: string[]) => {
     const username = args[0] || 'aayush-xid-su';
     const data: any = await actions.getGithubInfo(username);
+
     if (data.error || data.message) return data.error || `User ${username} not found.`;
-    return `GitHub user: ${data.login}\nName: ${data.name}\nBio: ${data.bio}\nFollowers: ${data.followers}\nFollowing: ${data.following}\nPublic Repos: ${data.public_repos}\nProfile: ${data.html_url}`;
+    
+    const joinDate = new Date(data.created_at).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+
+    return (
+        <div className="flex items-start gap-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={data.avatar_url} alt={`${data.login}'s avatar`} className="w-20 h-20 rounded-full" />
+            <div className="space-y-1">
+                <p className="text-lg font-bold">{data.name} (@{data.login})</p>
+                <p>Member since: {joinDate}</p>
+                <p>Repos: {data.public_repos} | Followers: {data.followers} | Following: {data.following}</p>
+                <a href={data.html_url} target="_blank" rel="noopener noreferrer" className="text-accent underline">
+                    View Profile
+                </a>
+            </div>
+        </div>
+    );
 };
+
 
 export const ip = async (args: string[]) => {
     const ip = args[0];

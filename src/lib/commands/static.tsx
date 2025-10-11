@@ -317,7 +317,7 @@ export const theme = async (args: string[], { setTheme }) => {
             <ul className="list-disc list-inside grid grid-cols-3 gap-x-4">
                 {themes.map(t => <li key={t}>{t}</li>)}
             </ul>
-            <p className="mt-2">Usage: theme [theme-name]</p>
+            <p className="mt-2">Usage: set theme [theme-name] or theme [theme-name]</p>
         </div>
     );
 };

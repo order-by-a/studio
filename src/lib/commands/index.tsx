@@ -56,13 +56,19 @@ export const processCommand = async (cmd: string, args: string[], context: Comma
         return;
     }
     
-    const handler = commands[cmd.toLowerCase()];
+    let handler = commands[cmd.toLowerCase()];
 
     if (!handler) {
-        const outputContent = showError(cmd, context);
-        addOutput(outputContent);
-        return;
+        // Special handling for theme for convenience
+        if (cmd.toLowerCase() === 'theme' && staticCommands.theme) {
+             handler = staticCommands.theme;
+        } else {
+            const outputContent = showError(cmd, context);
+            addOutput(outputContent);
+            return;
+        }
     }
+
 
     try {
         const outputContent = await handler(args, context);
