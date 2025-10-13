@@ -16,7 +16,7 @@ const AsciiHeader = () => {
             <pre className="text-foreground text-xs md:text-sm">
                 {logoArt}
             </pre>
-            <p>Welcome to Ayush Das's Terminal</p>
+            <p>Welcome to Ayush's Terminal</p>
         </div>
     );
 };
