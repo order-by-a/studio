@@ -15,7 +15,7 @@ type PowerOnScreenProps = {
   onFinished: () => void;
 };
 
-const PowerOnScreen = ({ onFinished }: PowerOnOnScreenProps) => {
+const PowerOnScreen = ({ onFinished }: PowerOnScreenProps) => {
   const [progress, setProgress] = useState(0);
   const [messagesFinished, setMessagesFinished] = useState(false);
 
