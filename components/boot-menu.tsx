@@ -38,7 +38,7 @@ const BootMenu = ({ onSelectItGuy }: BootMenuProps) => {
   }, [selected]);
 
   return (
-    <div className="fixed inset-0 bg-black text-primary font-mono flex flex-col items-center justify-center p-4">
+    <div className="fixed inset-0 bg-background text-primary font-mono flex flex-col items-center justify-center p-4">
       <div className="border border-primary rounded-lg p-4 md:p-8 w-full max-w-lg space-y-4 md:space-y-6">
         <h1 className="text-xl md:text-2xl">Boot Menu</h1>
         <p>Select your profile to continue:</p>
@@ -75,7 +75,7 @@ const BootMenu = ({ onSelectItGuy }: BootMenuProps) => {
           </button>
         </div>
       </div>
-      <div className="mt-4 text-center">
+      <div className="mt-4 text-center text-foreground">
         <Typewriter text="select to continue" speed={100} />
       </div>
     </div>

@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
@@ -37,7 +36,7 @@ type StopwatchState = {
 const Terminal = () => {
   const [username, setUsername] = useLocalStorage('terminal-username', 'visitor');
   const [hostname, setHostname] = useLocalStorage('terminal-hostname', 'aayush-xid-su');
-  const [theme, setTheme] = useLocalStorage<Theme>('terminal-theme', 'matrix');
+  const [theme, setTheme] = useLocalStorage<Theme>('terminal-theme', 'light');
   const [soundEnabled, setSoundEnabled] = useLocalStorage('terminal-sound', true);
   const [typingSpeed, setTypingSpeed] = useLocalStorage('terminal-speed', 20);
   const [history, setHistory] = useLocalStorage<string[]>('terminal-history', []);
