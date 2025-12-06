@@ -79,7 +79,7 @@ const TopBar = () => {
                 <span className="hidden md:inline">{weather}</span>
             </div>
             <div className="hidden md:block">
-                <a href="https://www.github.com/aayush-xid-su" target="_blank" rel="noopener noreferrer">https://www.github.com/aayush-xid-su</a>
+                <a href="https://www.github.com/aayush-xid-su" target="_blank" rel="noopener noreferrer">aayush-xid-su</a>
             </div>
             <div className="flex items-center gap-2">
                 <span>{isClient ? currentTime : ''}</span>
