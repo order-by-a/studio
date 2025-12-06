@@ -1,7 +1,6 @@
 
 import React from 'react';
-import { isTheme, themes } from '../themes';
-import { commandList } from './index';
+import { themes } from '../themes';
 import { manPages } from './manpages';
 import { findNode, root } from '../filesystem';
 
@@ -66,7 +65,7 @@ export const commandDescriptions: Record<string, string> = {
 const CommandSection = ({ title, commands }: { title: string, commands: string[] }) => (
     <div className="mb-2">
         <p className="text-primary font-bold">{title}:</p>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-x-4 gap-y-1">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-x-2 gap-y-1">
             {commands.sort().map(cmd => <span key={cmd}>{cmd}</span>)}
         </div>
     </div>
