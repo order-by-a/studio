@@ -137,7 +137,7 @@ export const man = async (args: string[]) => {
           <p className="font-bold text-accent">EXAMPLE</p>
           <div className="ml-4">
             <p>The following command:</p>
-            <pre className="p-2 my-1 bg-muted rounded font-mono text-sm whitespace-pre-wrap">> {page.example.command}</pre>
+            <pre className="p-2 my-1 bg-muted rounded font-mono text-sm whitespace-pre-wrap">{'>'} {page.example.command}</pre>
             <p>Will produce the following output:</p>
             <pre className="p-2 my-1 bg-muted rounded font-mono text-sm whitespace-pre-wrap">{page.example.output}</pre>
           </div>
@@ -239,7 +239,7 @@ export const theme = async () => {
     return (
         <div>
             <p>Available themes:</p>
-            <ul className="list-disc list-inside grid grid-cols-2 md:grid-cols-3 gap-x-4">
+            <ul className="list-disc list-inside grid grid-cols-2 md:grid-cols-3 gap-x-2">
                 {themes.map(t => <li key={t}>{t}</li>)}
             </ul>
             <p className="mt-2">Usage: set theme [theme-name]</p>
