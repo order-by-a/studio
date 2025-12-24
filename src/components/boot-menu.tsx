@@ -77,7 +77,7 @@ const BootMenu = ({ onSelectItGuy }: BootMenuProps) => {
         </div>
       </div>
       <div className="mt-4 text-center text-foreground">
-        <Typewriter text="select to continue" speed={100} />
+        <Typewriter text="seelect to continue" speed={100} />
       </div>
     </div>
   );
